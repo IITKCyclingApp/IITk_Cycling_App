@@ -6,18 +6,17 @@ const dealerSchema = new Schema({
     address: String,
     contact: [Number],
     email: String,
-    cycleStore: {
+    cycleStore: [{
+        cycleStoreId: mongoose.Types.ObjectId,
         address: String,
         contact: [Number],
         cycles: [{
             name: String,
-            id: mongoose.Types.ObjectId,
+            cycleId: mongoose.Types.ObjectId,
             rate: Number,
             totalCycles: Number,
-            bookedCycles: Number,
-            inUseCycles: Number
         }]
-    }
+    }]
 })
 
 const dealerModel = mongoose.model('dealerModel',dealerSchema);
