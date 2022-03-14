@@ -4,7 +4,9 @@ const { Schema } = mongoose;
 const statusSchema = new Schema({
     userId: mongoose.Types.ObjectId,
     dealerId: mongoose.Types.ObjectId,
+    cycleStoreId: mongoose.Types.ObjectId,
     cycleId: mongoose.Types.ObjectId,
+    
     timeStart: Date,
     timeEnd: Date,
     cost: Number,
