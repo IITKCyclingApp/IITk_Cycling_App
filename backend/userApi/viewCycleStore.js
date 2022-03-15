@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dealerModel from '../schema/dealerSchema.js';
-import availableCycle from './helperFunctions/availableCycle.js';
-import availableCycleAll from './helperFunctions/availableCycle.js';
+// import availableCycle from './helperFunctions/availableCycle.js';
+import allCycleData from './helperFunctions/availableCycle.js';
 
 
 //Link with mongodb server using mongoose
@@ -16,7 +16,7 @@ async function main() {
 //returns data of all stores.
 
 
-// Returns an object with keys as cycleStoreId :
+// Returns an object with keys as cycleStoreId as each row displayed to user will be corresponding to a cycle store
 // {
     // cycleStoreId1: {
     //     dealerId:
@@ -44,12 +44,12 @@ async function viewCycleStore(req,res){
     if(!req.dealerId){
         const dealerData = await dealerModel.find({});
         
-        const allAvailableCycle = await availableCycleAll();
+        const allAvailableCycle = await allCycleData(req.userId);
 
         let allData = {};
 
         dealerData.forEach(dealer => {
-            const dealerId = dealer._id;
+            const dealerId = dealer.dealerId;
 
 
             dealer.cycleStore.forEach(cycleStore => {
@@ -62,7 +62,8 @@ async function viewCycleStore(req,res){
                     cycleObject[cycle.cycleId] = {
                         name: cycle.name,
                         rate: cycle.rate,
-                        availableCycle: allAvailableCycle[dealerId][cycleStoreId][cycle.cycleId]
+                        availableCycle: allAvailableCycle[dealerId][cycleStoreId][cycle.cycleId][countAvailable],
+                        favorite: allAvailableCycle[dealerId][cycleStoreId][cycle.cycleId][favorite]
                     }
 
                 })
