@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const dealerSchema = new Schema({
+    dealerId: mongoose.Types.ObjectId,
     name: String,
     address: String,
     contact: [Number],
