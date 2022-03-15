@@ -6,7 +6,7 @@ const userSchema = new Schema({
     name: String,
     address: String,
     contact: [Number],
-    favourites: [{
+    favorites: [{
         dealerId: mongoose.Types.ObjectId,
         cycleStoreId: mongoose.Types.ObjectId,
         cycleId: mongoose.Types.ObjectId
