@@ -15,7 +15,7 @@ async function main() {
 
 async function availableCycleById(dealerId, cycleStoreId, cycleId){
 
-    const dealerData = await dealerModel.find({_id:dealerId});
+    const dealerData = await dealerModel.find({dealerId:dealerId});
     const cycleStoreData = dealerData.cycleStore;
     
     let totalCycles;                //Stores total number of cycles corresponding to dealerId, cycleStoreId and cycleId. Easier if this data is stored in statusSchema
@@ -41,7 +41,7 @@ async function availableCycleById(dealerId, cycleStoreId, cycleId){
         return true;
     });
 
-    const inUseCycles = await statusModel.count({_id:dealerId, cycleStoreId: cycleStoreId, cycleId: cycleId, $or:[{status:1},{status:2}]});
+    const inUseCycles = await statusModel.count({dealerId:dealerId, cycleStoreId: cycleStoreId, cycleId: cycleId, $or:[{status:1},{status:2}]});
 
     return totalCycles - inUseCycles;
 
@@ -50,11 +50,27 @@ async function availableCycleById(dealerId, cycleStoreId, cycleId){
 
 
 
-async function availableCycleAll(){
+
+
+
+async function allCycleData(userId){
 
     const allDealerData = await dealerModel.find({});  // Array of objects of structure dealerSchema
 
     const inUseCycles = await statusModel.find({$or:[{status:1},{status:2}]});
+
+    let userFavorites;
+    favoriteCycleId = [];
+    if(userId){
+
+        userFavorites = await userModel.findOne({userId:userId},"favorites");
+        userFavorites[favorites].forEach(element =>{
+            favoriteCycleId.push(element.cycleId);
+        })
+
+
+    }
+
     let cyclesCount = {};
 
     inUseCycles.forEach(data => {
@@ -67,9 +83,9 @@ async function availableCycleAll(){
     })
 
 
-    let allAvailableCycle = {};
+    let allCycleData = {};
     allDealerData.forEach(dealer => {
-        const dealerId = dealer._id;
+        const dealerId = dealer.dealerId;
         const cycleStoreObject = {};
 
         dealer.cycleStore.forEach(cycleStore => {
@@ -79,18 +95,40 @@ async function availableCycleAll(){
             cycleStore.cycles.forEach(cycle =>{
                 const cycleId = cycle.cycleId;
 
-                cycleObject[cycleId] = cycle.totalCycles - cyclesCount[cycleId];
-            })
+                // cycleObject[cycleId] = cycle.totalCycles - cyclesCount[cycleId];
+                let favorite = false;
+                if(userId && cycleId in favoriteCycleId)
+                favorite = true;
+
+                cycleObject[cycleId] = {
+
+                    countAvailable: cycle.totalCycles - cyclesCount[cycleId],
+                    favorite: favorite,
+                    dealerId: dealerId,
+                    dealerName: dealer.name,
+                    dealerAddress: dealer.address,
+                    dealerContact: dealer.contact,
+                    dealerEmail: dealer.email,
+                    cycleStoreId: cycleStoreId,
+                    cycleStoreAddress: cycleStore.address,
+                    cycleStoreContact: cycleStore.contact,
+                    cycleName: cycle.name,
+                    cycleRate: cycle.rate,
+
+                }
+
+
+            });
 
             cycleStoreObject[cycleStoreId] = cycleObject; 
-        })
+        });
 
-        allAvailableCycle[dealerId] = cycleStoreObject;
-    })
+        allCycleData[dealerId] = cycleStoreObject;
+    });
 
-    return allAvailableCycle;
+    return allCycleData;
 
 }
 
 
-export default {availableCycleById, availableCycleAll};
+export default {availableCycleById, allCycleData};
