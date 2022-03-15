@@ -39,6 +39,9 @@ async function main() {
     // }
 // }
 
+
+//req object : {userId:, dealerId:}
+
 async function viewCycleStore(req,res){
 
     if(!req.dealerId){

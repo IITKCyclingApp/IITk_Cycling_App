@@ -15,7 +15,7 @@ async function main() {
 
 
 
-
+//req object : {userId:}
 
 async function viewFavoriteCycle(req,res){
 

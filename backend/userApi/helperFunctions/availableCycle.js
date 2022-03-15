@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import statusModel from '../schema/statusSchema.js';
-import dealerModel from '../schema/dealerSchema.js';
+import statusModel from '../../schema/statusSchema.js';
+import dealerModel from '../../schema/dealerSchema.js';
 
 
 //Link with mongodb server using mongoose

@@ -9,7 +9,11 @@ async function main() {
   await mongoose.connect('mongodb://localhost:27017/test');
 }
 
-async function cancelBooking(req,res){
+
+
+//req object : {userId:, dealerId:, cycleStoreId:, cycleId:}
+
+async function confirmBooking(req,res){
 
 
     await statusModel.updateOne({userId: req.userId,
@@ -21,4 +25,4 @@ async function cancelBooking(req,res){
 
 }
 
-export default cancelBooking;
+export default confirmBooking;
