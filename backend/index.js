@@ -11,6 +11,7 @@ import pastTransactionUser from './userApi/pastTransaction.js';
 import viewCycleStore from './userApi/viewCycleStore.js';
 import viewFavoriteCycle from './userApi/viewFavorites.js';
 import viewProfileUser from './userApi/viewProfile.js';
+import currentStatusUser from './userApi/currentStatus.js';
 
 
 
@@ -21,15 +22,16 @@ app.use(cors());
 // app.use(express.static("./../iitk_cycling/public"));
 // app.set("view engine","ejs");
 //routes
-app.post('/addFavoriteCycle',addFavoriteCycle);
-app.post('/bookCycle',bookCycle);
-app.post('/confirmBooking',confirmBooking);
-app.post('/cancelBooking',cancelBooking);
-app.post('/deleteFavoriteCycle',deleteFavoriteCycle);
-app.post('/pastTransactionUser',pastTransactionUser);
-app.get('/viewCycleStore',viewCycleStore);
-app.get('/viewFavoriteCycle',viewFavoriteCycle);
-app.get('/viewProfileUser',viewProfileUser);
+app.post('/user/addFavorite',addFavoriteCycle);
+app.post('/user/bookCycle',bookCycle);
+app.post('/user/confirmBooking',confirmBooking);
+app.post('/user/cancelBooking',cancelBooking);
+app.post('/user/deleteFavorite',deleteFavoriteCycle);
+app.post('/user/pastTransaction',pastTransactionUser);
+app.get('/user/viewCycle',viewCycleStore);
+app.get('/user/viewFavorite',viewFavoriteCycle);
+app.get('/user/viewProfile',viewProfileUser);
+app.get('/user/currentStatus',currentStatusUser);
 
 
 // app.use(express)
