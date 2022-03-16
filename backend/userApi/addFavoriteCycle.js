@@ -15,14 +15,14 @@ async function main() {
 async function addFavoriteCycle(req,res){
 
 
-    const currentFavorites = await userModel.findOne({userId:req.userId},"favorites");
-    currentFavorites[favorites].push({
-        dealerId: req.dealerId,
-        cycleStoreId: req.cycleStoreId,
-        cycleId: req.cycleId
+    const currentFavorites = await userModel.findOne({userId:req.body.userId},"favorites");
+    currentFavorites.favorites.push({
+        dealerId: req.body.dealerId,
+        cycleStoreId: req.body.cycleStoreId,
+        cycleId: req.body.cycleId
     });
 
-    await userModel.updateOne({userId:req.userId},{favorites:currentFavorites});
+    await userModel.updateOne({userId:req.body.userId},{favorites:currentFavorites.favorites});
     
     return res.status(200).json({'msg':'Success: Favorite added successfully'});
 

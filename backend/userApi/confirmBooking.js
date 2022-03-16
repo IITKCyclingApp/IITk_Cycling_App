@@ -11,17 +11,15 @@ async function main() {
 
 
 
-//req object : {userId:, dealerId:, cycleStoreId:, cycleId:}
+//req object : {userId:}
 
 async function confirmBooking(req,res){
 
 
-    await statusModel.updateOne({userId: req.userId,
-                          dealerId: req.dealerId,
-                          cycleStoreId: req.cycleStoreId,
-                          cycleId: req.cycleId},{status:2,timeStart:new Date(),cost: 0});
+    await statusModel.updateOne({userId: req.body.userId,
+                                status:1},{status:2,timeStart:new Date(),cost: 0});
     
-    return res.status(200).json({'msg':'Success: Booking cancelled successfully'});
+    return res.status(200).json({'msg':'Success: Booking confirmed successfully'});
 
 }
 

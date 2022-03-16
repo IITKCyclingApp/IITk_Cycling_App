@@ -16,18 +16,21 @@ async function main() {
 async function deleteFavoriteCycle(req,res){
 
 
-    const currentFavorites = await userModel.findOne({userId:req.userId},"favorites");
+    const currentFavorites = await userModel.findOne({userId:req.body.userId},"favorites");
 
-    for(let i=0; i<currentFavorites[favorites].length; i++){
+    for(let i=0; i<currentFavorites.favorites.length; i++){
 
-        if(element.dealerId === req.dealerId && element.cycleStoreId === req.cycleStoreId && element.cycleId === req.cycleId){
-            currentFavorites[favorites].splice(i,1);
+        if(currentFavorites.favorites[i].dealerId.toString() === req.body.dealerId && currentFavorites.favorites[i].cycleStoreId.toString() === req.body.cycleStoreId && currentFavorites.favorites[i].cycleId.toString() === req.body.cycleId){
+            
+            currentFavorites.favorites.splice(i,1);
             break;
         }
 
     }
 
-    await userModel.updateOne({userId:req.userId},{favorites:currentFavorites});
+    // console.log
+
+    await userModel.updateOne({userId:req.body.userId},{favorites:currentFavorites.favorites});
     
     return res.status(200).json({'msg':'Success: Favorite deleted successfully'});
 

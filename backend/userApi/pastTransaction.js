@@ -16,7 +16,7 @@ async function main() {
 async function pastTransactionUser(req,res){
 
 
-    const transaction = await statusModel.find({userId: req.userId});
+    const transaction = await statusModel.find({userId: req.body.userId});
     
     return res.status(200).json(transaction);
 

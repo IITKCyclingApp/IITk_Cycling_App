@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 // import dealerModel from '../schema/dealerSchema.js';
-// import userModel from '../schema/userSchema.js';
-import allCycleData from "./helperFunctions/availableCycle.js";
+import userModel from '../schema/userSchema.js';
+import helperFunction from "./helperFunctions/availableCycle.js";
 
 
 
@@ -20,22 +20,22 @@ async function main() {
 async function viewFavoriteCycle(req,res){
 
 
-    const currentFavorites = await userModel.findOne({userId:req.userId},"favorites");
-
-    // const delaerData = await dealerModel.find({});
+    const currentFavorites = await userModel.findOne({userId:req.body.userId},"favorites");
     
 
-    const allCycleData = await allCycleData(req.userId);    // Object of form {dealerId: {cycleStoreId: {cycleId: {allData}}}}
+    const cycleData = await helperFunction.allCycleData(req.body.userId);    // Object of form {dealerId: {cycleStoreId: {cycleId: {allData}}}}
 
     let favoriteCycleData = {};
 
-    currentFavorites[favorites].forEach(element =>{
+    if(currentFavorites.favorites){
+        currentFavorites.favorites.forEach(element =>{
+    
+            favoriteCycleData[element.cycleId] = cycleData[element.dealerId][element.cycleStoreId][element.cycleId];
+    
+        })
+    }
 
-        favoriteCycleData[element.cycleId] = allCycleData[element.dealerId][element.cycleStoreId][element.cycleId];
-
-    })
-
-    return favoriteCycleData;
+    return res.status(200).json(favoriteCycleData);
 
 }
 

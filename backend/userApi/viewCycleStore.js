@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dealerModel from '../schema/dealerSchema.js';
 // import availableCycle from './helperFunctions/availableCycle.js';
-import allCycleData from './helperFunctions/availableCycle.js';
+import helperFunction from './helperFunctions/availableCycle.js';
 
 
 //Link with mongodb server using mongoose
@@ -44,10 +44,10 @@ async function main() {
 
 async function viewCycleStore(req,res){
 
-    if(!req.dealerId){
+    if(!req.body.dealerId){
         const dealerData = await dealerModel.find({});
         
-        const allAvailableCycle = await allCycleData(req.userId);
+        const allAvailableCycle = await helperFunction.allCycleData(req.body.userId);
 
         let allData = {};
 
@@ -65,8 +65,8 @@ async function viewCycleStore(req,res){
                     cycleObject[cycle.cycleId] = {
                         name: cycle.name,
                         rate: cycle.rate,
-                        availableCycle: allAvailableCycle[dealerId][cycleStoreId][cycle.cycleId][countAvailable],
-                        favorite: allAvailableCycle[dealerId][cycleStoreId][cycle.cycleId][favorite]
+                        availableCycle: allAvailableCycle[dealerId][cycleStoreId][cycle.cycleId].countAvailable,
+                        favorite: allAvailableCycle[dealerId][cycleStoreId][cycle.cycleId].favorite
                     }
 
                 })
@@ -91,7 +91,7 @@ async function viewCycleStore(req,res){
 
     }
     // else{
-    //     const cycleStoreData = await dealerModel.find({_id:req.dealerId,"cycleStore.cycleStoreId":req.cycleStoreId},'_id cycleStore');
+    //     const cycleStoreData = await dealerModel.find({_id:req.body.dealerId,"cycleStore.cycleStoreId":req.body.cycleStoreId},'_id cycleStore');
     //     return res.status(200).json(cycleStoreData);
     // }
 

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import statusModel from '../../schema/statusSchema.js';
 import dealerModel from '../../schema/dealerSchema.js';
+import userModel from '../../schema/userSchema.js';
 
 
 //Link with mongodb server using mongoose
@@ -15,7 +16,7 @@ async function main() {
 
 async function availableCycleById(dealerId, cycleStoreId, cycleId){
 
-    const dealerData = await dealerModel.find({dealerId:dealerId});
+    const dealerData = await dealerModel.findOne({dealerId:dealerId});
     const cycleStoreData = dealerData.cycleStore;
     
     let totalCycles;                //Stores total number of cycles corresponding to dealerId, cycleStoreId and cycleId. Easier if this data is stored in statusSchema
@@ -60,16 +61,19 @@ async function allCycleData(userId){
     const inUseCycles = await statusModel.find({$or:[{status:1},{status:2}]});
 
     let userFavorites;
-    favoriteCycleId = [];
+    let favoriteCycleId = [];
     if(userId){
 
         userFavorites = await userModel.findOne({userId:userId},"favorites");
-        userFavorites[favorites].forEach(element =>{
-            favoriteCycleId.push(element.cycleId);
+        userFavorites = userFavorites.favorites;
+        userFavorites.forEach(element =>{
+            
+            favoriteCycleId.push(element.cycleId.toString());
         })
 
 
     }
+
 
     let cyclesCount = {};
 
@@ -97,14 +101,20 @@ async function allCycleData(userId){
 
                 // cycleObject[cycleId] = cycle.totalCycles - cyclesCount[cycleId];
                 let favorite = false;
-                if(userId && cycleId in favoriteCycleId)
-                favorite = true;
+                
+                if(userId && favoriteCycleId.indexOf(cycleId.toString())!==-1){
+                    favorite = true;
+                }
+
+                if(!cyclesCount[cycleId]){
+                    cyclesCount[cycleId]=0;
+                }
 
                 cycleObject[cycleId] = {
 
                     countAvailable: cycle.totalCycles - cyclesCount[cycleId],
                     favorite: favorite,
-                    dealerId: dealerId,
+                    dealerId: dealer.dealerId,
                     dealerName: dealer.name,
                     dealerAddress: dealer.address,
                     dealerContact: dealer.contact,
