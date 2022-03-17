@@ -20,6 +20,7 @@ import addCycle from './dealerApi/addCycle.js';
 import deleteCycle from './dealerApi/deleteCycle.js';
 import changeRate from './dealerApi/changeRate.js';
 import changeTotalCycles from './dealerApi/changeTotalCycles.js';
+import returnCycle from './dealerApi/returnCycle.js';
 
 //middleware
 app.use(json());
@@ -46,6 +47,7 @@ app.post('/addCycle',addCycle);
 app.post('/deleteCycle',deleteCycle);
 app.post('/changeRate',changeRate);
 app.post('/changeTotalCycles',changeTotalCycles);
+app.post('/returnCycle',returnCycle);
 // app.use(express)
 
 const port = 5000;

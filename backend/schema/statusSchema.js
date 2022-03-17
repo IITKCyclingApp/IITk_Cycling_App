@@ -10,7 +10,7 @@ const statusSchema = new Schema({
     timeStart: Date,
     timeEnd: Date,
     cost: Number,
-    
+    rate: Number,
     //1 if cycle is booked, 2 if cycle in use, 3 if cycle returned after use, 4 if booking cancelled. 3 and 4 to be shown in previous
     //transactions page. 
     status: Number 
