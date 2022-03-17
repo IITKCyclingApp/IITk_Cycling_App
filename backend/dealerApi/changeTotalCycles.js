@@ -7,29 +7,28 @@ main().catch(err => console.log(err));
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/test');
-  // console.log("mongoose connected addCycle");
 }
 /*req will be of form
  {
     dealerId :
     cycleStoreId :
     cycleId
-    newRate:
+    newTotalCycles:
  } 
  Example:
  {
     "dealerId":"507f191e810c19729de860ea",
     "cycleStoreId":"6232b7cc67d359b1050da700",
     "cycleId": "6232bf24e0ac1fc02a58e73c",
-    "newRate" : 150
+    "newTotalCycles" : 12
   }
  
 */
-async function changeRate(req, res) {
+async function changeTotalCycles(req, res) {
   const data = req.body;
-  console.log("request to rate update");
-  await dealerModel.updateOne({ dealerId: data.dealerId }, { "cycleStore.$[elem].cycles.$[elem2].rate": data.newRate },{arrayFilters:[{"elem.cycleStoreId":data.cycleStoreId},{"elem2.cycleId":data.cycleId}]});
-  res.status(200).json({ 'msg': 'rate updated successfully' });
+  console.log("request to TotalCycles update");
+  await dealerModel.updateOne({ dealerId: data.dealerId }, { "cycleStore.$[elem].cycles.$[elem2].totalCycles": data.newTotalCycles },{arrayFilters:[{"elem.cycleStoreId":data.cycleStoreId},{"elem2.cycleId":data.cycleId}]});
+  res.status(200).json({ 'msg': 'TotalCycles updated successfully' });
 }
-export default changeRate;
+export default changeTotalCycles;
 //tested

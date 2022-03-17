@@ -18,6 +18,8 @@ import addCycleStore from './dealerApi/addCycleStore.js'
 import deleteCycleStore from './dealerApi/deleteCycleStore.js'
 import addCycle from './dealerApi/addCycle.js';
 import deleteCycle from './dealerApi/deleteCycle.js';
+import changeRate from './dealerApi/changeRate.js';
+import changeTotalCycles from './dealerApi/changeTotalCycles.js';
 
 //middleware
 app.use(json());
@@ -42,6 +44,8 @@ app.post('/addCycleStore',addCycleStore);
 app.post('/deleteCycleStore',deleteCycleStore);
 app.post('/addCycle',addCycle);
 app.post('/deleteCycle',deleteCycle);
+app.post('/changeRate',changeRate);
+app.post('/changeTotalCycles',changeTotalCycles);
 // app.use(express)
 
 const port = 5000;
