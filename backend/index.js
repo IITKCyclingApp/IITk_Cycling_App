@@ -13,7 +13,11 @@ import viewFavoriteCycle from './userApi/viewFavorites.js';
 import viewProfileUser from './userApi/viewProfile.js';
 import currentStatusUser from './userApi/currentStatus.js';
 
-
+//dealer
+import addCycleStore from './dealerApi/addCycleStore.js'
+import deleteCycleStore from './dealerApi/deleteCycleStore.js'
+import addCycle from './dealerApi/addCycle.js';
+import deleteCycle from './dealerApi/deleteCycle.js';
 
 //middleware
 app.use(json());
@@ -33,7 +37,11 @@ app.get('/user/viewFavorite',viewFavoriteCycle);
 app.get('/user/viewProfile',viewProfileUser);
 app.get('/user/currentStatus',currentStatusUser);
 
-
+//dealer
+app.post('/addCycleStore',addCycleStore);
+app.post('/deleteCycleStore',deleteCycleStore);
+app.post('/addCycle',addCycle);
+app.post('/deleteCycle',deleteCycle);
 // app.use(express)
 
 const port = 5000;
