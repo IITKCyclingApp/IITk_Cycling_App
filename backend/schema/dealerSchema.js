@@ -7,6 +7,7 @@ const dealerSchema = new Schema({
     address: String,
     contact: [Number],
     email: String,
+    password: String,
     cycleStore: [{
         cycleStoreId: mongoose.Types.ObjectId,
         address: String,
