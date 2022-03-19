@@ -33,7 +33,7 @@ async function loginUser(req, res) {
     }
     else {
       let token = jwt.sign({ userId: data[0].userId }, secret.secret, { expiresIn: 3600 });
-      return res.status(200).json({ "auth": true, "msg": "User logged in successfully", "token": token });
+      return res.status(200).json({ "auth": true, "msg": "User logged in successfully", "token": token,"userId":data[0].userId });
     }
 
   }
