@@ -25,7 +25,8 @@ import returnCycle from './dealerApi/returnCycle.js';
 //auth
 import registerUser from './auth/registerUser.js';
 import registerDealer from './auth/registerDealer.js';
-
+import loginUser from './auth/loginUser.js'
+import loginDealer from './auth/loginDealer.js'
 //middleware
 app.use(json());
 app.use(cors());
@@ -55,7 +56,8 @@ app.post('/returnCycle', returnCycle);
 //auth
 app.post('/registerUser',registerUser);
 app.post('/registerDealer',registerDealer);
-
+app.post('/loginUser',loginUser);
+app.post('/loginDealer',loginDealer);
 // app.use(express)
 
 const port = 5000;
