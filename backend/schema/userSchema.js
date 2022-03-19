@@ -13,7 +13,8 @@ const userSchema = new Schema({
     }],
     email: {type:String, unique:true} ,
     roll: {type:Number, unique:true},
-    username: String
+    username: String,
+    password: String
 })
 
 const userModel = mongoose.model('userModel',userSchema);
