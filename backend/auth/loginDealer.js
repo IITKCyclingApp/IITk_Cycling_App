@@ -33,7 +33,7 @@ async function loginDealer(req, res) {
     }
     else {
       let token = jwt.sign({ DealerId: data[0].DealerId }, secret.secret, { expiresIn: 3600 });
-      return res.status(200).json({ "auth": true, "msg": "Dealer logged in successfully", "token": token });
+      return res.status(200).json({ "auth": true, "msg": "Dealer logged in successfully", "token": token ,"DealerId":data[0].DealerId});
     }
 
   }
