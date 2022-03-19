@@ -19,7 +19,16 @@ async function confirmBooking(req,res){
     await statusModel.updateOne({userId: req.body.userId,
                                 status:1},{status:2,timeStart:new Date(),cost: 0});
     
-    return res.status(200).json({'msg':'Success: Booking confirmed successfully'});
+    const dealerId = req.body.dealerId;
+    const cycleStoreId = req.body.cycleStoreId;
+    const cycleId = req.body.cycleId;
+    const allCycleData = await helperFunction.allCycleData(req.body.userId);
+    const result = {
+      allData: allCycleData[dealerId][cycleStoreId][cycleId]
+    }
+
+
+    return res.status(200).json(result);
 
 }
 

@@ -35,7 +35,7 @@ async function viewFavoriteCycle(req,res){
         })
     }
 
-    return res.status(200).json(favoriteCycleData);
+    return res.status(200).json({data:favoriteCycleData});
 
 }
 

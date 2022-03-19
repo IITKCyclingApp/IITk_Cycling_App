@@ -4,12 +4,14 @@ import {Link} from 'react-router-dom';
 import NavBar from './navBar';
 import CycleStore from './cycleStore';
 import CurStatus from './curStatus';
+// import CycleTile from './cycleTile';
 import "./css/bootstrap.min.css";
 import "./css/bootstrap-theme.min.css";
 import "./css/fontAwesome.css";
 import "./css/hero-slider.css";
 import "./css/owl-carousel.css";
 import "./css/style.css";
+import CycleTile from './cycleTile';
 // import "./js/vendor/modernizr-2.8.3-respond-1.4.2.min.js";
 
 class UserHome extends React.Component{
@@ -18,13 +20,13 @@ class UserHome extends React.Component{
 
         super(props);
         this.state = {
-            userId:"",
+            userId:"6230cae60c6112bffebccbc2",
             token:"",
-            // favorites:[],
+            favorites:[],
             // profile:{},
             // transactions:[],
             currentCycle:{},
-            cycleStore: {}
+            // cycleStore: {}
         };
 
     };
@@ -33,60 +35,63 @@ class UserHome extends React.Component{
 
     //currentCycle.response = 0 if user has no in use or booked cycle
 
-    // async componentDidMount(){
+    async componentDidMount(){
 
-    //     try{
+        try{
 
-    //         // Request to currentStatus 
+            // Request to currentStatus 
 
-    //         let req = {
-    //             method : 'POST',
-    //             headers : {
-    //               'authorization' : this.state.token, 
-    //               'Content-Type': 'application/json',
-    //             },
-    //             body : JSON.stringify({
-    //               userId: this.state.userId,
-    //             })
-    //         };
+            let req = {
+                method : 'POST',
+                headers : {
+                  'authorization' : this.state.token, 
+                  'Content-Type': 'application/json',
+                },
+                body : JSON.stringify({
+                  userId: this.state.userId,
+                })
+            };
 
-    //         let res = await fetch('/user/currentStatus',req);
-    //         let response = await res.json();
+            let res = await fetch('http://localhost:5000/user/currentStatus',req);
+            let response = await res.json();
+            // console.log("response",response);
 
-    //         if(res.status===200){
+            if(res.status===200){
 
-    //             //Request to viewCycle
+                //Request to viewCycle
 
-    //             req = {
-    //                 method : 'POST',
-    //                 headers : {
-    //                     'authorization' : this.state.token, 
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //                 body : JSON.stringify({
-    //                     userId: this.state.userId,
-    //                 })
-    //             };
+                req = {
+                    method : 'POST',
+                    headers : {
+                        'authorization' : this.state.token, 
+                        'Content-Type': 'application/json',
+                    },
+                    body : JSON.stringify({
+                        userId: this.state.userId,
+                    })
+                };
 
-    //             res = await fetch('/user/viewCycle',req);
-    //             let response2 = await res.json();
+                res = await fetch('http://localhost:5000/user/viewFavorite',req);
+                let response2 = await res.json();
 
-    //             if(res.status===200){
+                if(res.status===200){
 
-    //                 this.setState({currentCycle : response2.length===0?{status:0}:response2[0],cycleStore: response});
+                    // console.log("response2 ",response2);
+                    this.setState({currentCycle : !response.allData?{transaction:{status:0}}:response,favorites:response2.data});
+                    // console.log(this.state.currentCycle.allData);
 
-    //             }
+                }
 
-    //         }
+            }
 
-    //     }catch(err){
+        }catch(err){
 
-    //         console.log(err);
-    //         alert(err);
+            console.log(err);
+            alert(err);
 
-    //     }
+        }
 
-    // }
+    }
 
     async bookCycle (dealerId, cycleStoreId, cycleId, rate){
 
@@ -117,7 +122,7 @@ class UserHome extends React.Component{
 
                 //May add pop up with response.msg
 
-                this.setState({currentCycle: {
+                this.setState({currentCycle: {transaction:{
                     userId: this.state.userId,
                     dealerId: dealerId,
                     cycleStoreId: cycleStoreId,
@@ -128,7 +133,7 @@ class UserHome extends React.Component{
                     cost: 0,
                     rate: rate,
                     status: 1
-                }});
+                },allData:response.allData}});
 
             }else if(res.status===400){
 
@@ -171,7 +176,7 @@ class UserHome extends React.Component{
 
                 //May add pop up with response.msg
 
-                this.setState({currentCycle: {
+                this.setState({currentCycle: {transaction:{
                     userId: this.state.userId,
                     dealerId: this.state.currentCycle.dealerId,
                     cycleStoreId: this.state.currentCycle.cycleStoreId,
@@ -182,7 +187,7 @@ class UserHome extends React.Component{
                     cost: 0,
                     rate: this.state.currentCycle.rate,
                     status: 2
-                }});
+                },allData:this.state.currentCycle.allData}});
 
             }
 
@@ -355,6 +360,141 @@ class UserHome extends React.Component{
 
     render(){
 
+        let currStatus;
+
+        if(this.state.currentCycle.transaction){
+
+            if(this.state.currentCycle.transaction.status===0){
+
+                currStatus = (<section className="featured-places">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="section-heading">
+                        <span><h1>Booked Cycles</h1></span>
+                        <h2 id="store-name">You have not booked any cycle. Scroll down to book your favorite cycles</h2>
+                        <hr />
+                      </div>
+                    </div> 
+                    </div>
+                    {/* <CycleTile name="Vector91" rate={15} contact={7268998999} booking_time={(new Date()).toLocaleString()}  /> */}
+                  </div>
+              </section>);
+
+            }else if(this.state.currentCycle.transaction.status===1){
+
+                currStatus = (<section className="featured-places">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="section-heading">
+                        <span><h1>Booked Cycles</h1></span>
+                        <h2 id="store-name">This is the cycle you have currently booked.</h2>
+                        <hr />
+                      </div>
+                    </div> 
+                  </div> 
+                  <div className="row">
+                    {/* This one element contains a card to hold one cycle*/}
+                    {/* Cycle card start */}
+                    <div className="col-md-4 col-sm-6 col-xs-12">
+                      <div className="featured-item">
+                        <div className="thumb">
+                          <div className="thumb-img">
+                            <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
+                          </div>
+                          {/* Two styles of add to favourites button */}
+                          {/* <div class="plus-button overlay-content">
+                                        <a href="team.html"><i class="fa fa-plus"></i></a>
+                                    </div> */}
+                          <div className="overlay-content">
+                            <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
+                          </div>
+                        </div>
+                        <div className="down-content">
+                          <h4 id="cycleName">Cycle Name : {this.state.currentCycle.allData?this.state.currentCycle.allData.cycleName:""}</h4>
+                          <h4 id="cycleRate">Cycle Rate : {this.state.currentCycle.allData?this.state.currentCycle.allData.cycleRate:""}</h4>
+                          <h4 id="dealerNumber">Dealer Contact Number : {this.state.currentCycle.allData?this.state.currentCycle.allData.dealerContact[0]:""}</h4>
+                          <h4 id="bookingTime">Booking Time : {this.state.currentCycle.transaction?new Date(this.state.currentCycle.transaction.timeStart).toLocaleString():""}</h4>
+                          <br />
+                          <div className="text-button">
+                            <a onClick={()=>this.confirmBooking()} style={{cursor:"pointer"}}><strong>Confirm Booking</strong></a>
+                          </div>
+                          <div className="text-button">
+                            <a onClick={()=>this.cancelBooking()} style={{cursor:"pointer"}}><strong>Cancel Booking</strong></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* <CycleTile name="Vector91" rate={15} contact={7268998999} booking_time={(new Date()).toLocaleString()}  /> */}
+                  </div>
+                </div>
+              </section>);
+
+            }else{
+
+                currStatus = (<section className="featured-places">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="section-heading">
+                        <span><h1>In Use Cycles</h1></span>
+                        <h2 id="store-name">This is the cycle you are currently using.</h2>
+                        <hr />
+                      </div>
+                    </div> 
+                  </div> 
+                  <div className="row">
+                    {/* This one element contains a card to hold one cycle*/}
+                    {/* Cycle card start */}
+                    <div className="col-md-4 col-sm-6 col-xs-12">
+                      <div className="featured-item">
+                        <div className="thumb">
+                          <div className="thumb-img">
+                            <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
+                          </div>
+                          {/* Two styles of add to favourites button */}
+                          {/* <div class="plus-button overlay-content">
+                                        <a href="team.html"><i class="fa fa-plus"></i></a>
+                                    </div> */}
+                          <div className="overlay-content">
+                            <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
+                          </div>
+                        </div>
+                        <div className="down-content">
+                          <h4 id="cycleName">Cycle Name : {this.state.currentCycle.allData?this.state.currentCycle.allData.cycleName:""}</h4>
+                          <h4 id="cycleRate">Cycle Rate : {this.state.currentCycle.allData?this.state.currentCycle.allData.cycleRate:""}</h4>
+                          <h4 id="dealerNumber">Dealer Contact Number : {this.state.currentCycle.allData?this.state.currentCycle.allData.dealerContact[0]:""}</h4>
+                          <h4 id="bookingTime">Start Time : {this.state.currentCycle.transaction?new Date(this.state.currentCycle.transaction.timeStart).toLocaleString():""}</h4>
+                          <h4 id="bookingTime">Cost : {this.state.currentCycle.transaction?this.state.currentCycle.transaction.cost:""}</h4>
+                          <br />
+                          {/* <div className="text-button">
+                            <a onClick={()=>this.confirmBooking()} style={{cursor:"pointer"}}><strong>Confirm Booking</strong></a>
+                          </div>
+                          <div className="text-button">
+                            <a onClick={()=>this.cancelBooking()} style={{cursor:"pointer"}}><strong>Cancel Booking</strong></a>
+                          </div> */}
+                        </div>
+                      </div>
+                    </div>
+                    {/* <CycleTile name="Vector91" rate={15} contact={7268998999} booking_time={(new Date()).toLocaleString()}  /> */}
+                  </div>
+                </div>
+              </section>)
+
+            }
+
+
+        }
+
+        let favorites = [];
+        if(this.state.favorites){
+
+            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} />})
+
+        }
+        console.log("favorite cycle data",this.state.favorites);
+
 
         return(
             // <div>
@@ -419,142 +559,17 @@ class UserHome extends React.Component{
   {/* Banner end */}
   <main>
     {/* Store section */}
-    <section className="featured-places">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="section-heading">
-              <span><h1>Booked Cycles</h1></span>
-              <h2 id="store-name">These are the cycles you have currently booked.</h2>
-              <hr />
-            </div>
-          </div> 
-        </div> 
-        <div className="row">
-          {/* This one element contains a card to hold one cycle*/}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                {/* Two styles of add to favourites button */}
-                {/* <div class="plus-button overlay-content">
-                              <a href="team.html"><i class="fa fa-plus"></i></a>
-                          </div> */}
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Booking Time : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                {/* Two styles of add to favourites button */}
-                {/* <div class="plus-button overlay-content">
-                              <a href="team.html"><i class="fa fa-plus"></i></a>
-                          </div> */}
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Booking Time : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                {/* Two styles of add to favourites button */}
-                {/* <div class="plus-button overlay-content">
-                              <a href="team.html"><i class="fa fa-plus"></i></a>
-                          </div> */}
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Booking Time : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                {/* Two styles of add to favourites button */}
-                {/* <div class="plus-button overlay-content">
-                              <a href="team.html"><i class="fa fa-plus"></i></a>
-                          </div> */}
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Booking Time : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-        </div>
-      </div>
-    </section>
+    {currStatus}
+    {/* Store section */}
+    
     {/* Store section */}
     <section className="featured-places">
       <div className="container">
         <div className="row">
           <div className="col-md-12">
             <div className="section-heading">
-              <span><h1>Current Cyles</h1></span>
-              <h2 id="store-name">These are the cycles you are using currently</h2>
+              <span><h1>Favorites</h1></span>
+              <h2 id="store-name">{favorites.length===0?"OOps you do not have any favorite cycle.    Visit store to see a whole range of new cycles to ride":"Are you ready to rent these cycles you like ?"}</h2>
               <hr />
             </div>
           </div> 
@@ -562,180 +577,7 @@ class UserHome extends React.Component{
         <div className="row">
           {/* This one element contains a card to hold one cycle*/}
           {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                {/* Two styles of add to favourites button */}
-                {/* <div class="plus-button overlay-content">
-                              <a href="team.html"><i class="fa fa-plus"></i></a>
-                          </div> */}
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Time at booking : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                {/* Two styles of add to favourites button */}
-                {/* <div class="plus-button overlay-content">
-                              <a href="team.html"><i class="fa fa-plus"></i></a>
-                          </div> */}
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Time at booking : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                {/* Two styles of add to favourites button */}
-                {/* <div class="plus-button overlay-content">
-                              <a href="team.html"><i class="fa fa-plus"></i></a>
-                          </div> */}
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Time at booking : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-        </div>
-      </div>
-    </section>
-    {/* Store section */}
-    <section className="featured-places">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="section-heading">
-              <span><h1>Past Transactions.</h1></span>
-              <h2 id="store-name">These are your past transactions.</h2>
-              <hr />
-            </div>
-          </div> 
-        </div> 
-        <div className="row">
-          {/* This one element contains a card to hold one cycle*/}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Time at booking : </h4>
-                <h4 id="bookingFare">Fare : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Time at booking : </h4>
-                <h4 id="bookingFare">Fare : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Cycle card end */}
-          {/* Cycle card start */}
-          <div className="col-md-4 col-sm-6 col-xs-12">
-            <div className="featured-item">
-              <div className="thumb">
-                <div className="thumb-img">
-                  <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
-                </div>
-                <div className="overlay-content">
-                  <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
-                </div>
-              </div>
-              <div className="down-content">
-                <h4 id="cycleName">Cycle Name :</h4>
-                <h4 id="cycleRate">Cycle Rate : </h4>
-                <h4 id="dealerNumber">Dealer Contact Number : </h4>
-                <h4 id="bookingTime">Time at booking : </h4>
-                <h4 id="bookingFare">Fare : </h4>
-                <br />
-                <div className="text-button">
-                  <a href="#"><strong>Rent</strong></a>
-                </div>
-              </div>
-            </div>
-          </div>
+         {favorites}
           {/* Cycle card end */}
         </div>
       </div>

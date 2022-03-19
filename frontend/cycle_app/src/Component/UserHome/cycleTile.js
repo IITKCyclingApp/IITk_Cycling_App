@@ -19,10 +19,11 @@ class CycleTile extends React.Component{
       </div>
     </div>
     <div className="down-content">
-      <h4 id="cycleName">Cycle Name : {this.props.cycle.name}</h4>
-      <h4 id="cycleRate">Cycle Rate : {this.props.cycle.rate}</h4>
-      <h4 id="dealerNumber">Dealer Contact Number : {this.props.cycle.contact_number}</h4>
-      <h4 id="bookingTime">Booking Time : {this.props.cycle.booking_time}</h4>
+      <h4 id="cycleName">Cycle Name : {this.props.name}</h4>
+      <h4 id="cycleRate">Cycle Rate : {this.props.rate}</h4>
+      <h4 id="dealerNumber">Dealer Contact Number : {this.props.contact}</h4>
+      <h4 id="dealerNumber">Pick Up Address : {this.props.address}</h4>
+      {/* <h4 id="bookingTime">Booking Time : {this.props.booking_time}</h4> */}
       <br />
       <div className="text-button">
         <a href="#"><strong>Rent</strong></a>
