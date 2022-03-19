@@ -25,12 +25,12 @@ async function viewFavoriteCycle(req,res){
 
     const cycleData = await helperFunction.allCycleData(req.body.userId);    // Object of form {dealerId: {cycleStoreId: {cycleId: {allData}}}}
 
-    let favoriteCycleData = {};
+    let favoriteCycleData = [];
 
     if(currentFavorites.favorites){
         currentFavorites.favorites.forEach(element =>{
     
-            favoriteCycleData[element.cycleId] = cycleData[element.dealerId][element.cycleStoreId][element.cycleId];
+            favoriteCycleData.push(cycleData[element.dealerId][element.cycleStoreId][element.cycleId]);
     
         })
     }

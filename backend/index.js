@@ -34,7 +34,7 @@ app.post('/user/bookCycle',bookCycle);
 app.post('/user/confirmBooking',confirmBooking);
 app.post('/user/cancelBooking',cancelBooking);
 app.post('/user/deleteFavorite',deleteFavoriteCycle);
-app.post('/user/pastTransaction',pastTransactionUser);
+app.get('/user/pastTransaction',pastTransactionUser);
 app.get('/user/viewCycle',viewCycleStore);
 app.get('/user/viewFavorite',viewFavoriteCycle);
 app.get('/user/viewProfile',viewProfileUser);

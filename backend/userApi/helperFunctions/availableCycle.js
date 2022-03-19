@@ -124,6 +124,7 @@ async function allCycleData(userId){
                     cycleStoreContact: cycleStore.contact,
                     cycleName: cycle.name,
                     cycleRate: cycle.rate,
+                    cycleId: cycleId
 
                 }
 

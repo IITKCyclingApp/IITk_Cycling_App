@@ -12,7 +12,7 @@ async function main() {
 
 
 
-//req object : {userId:, dealerId:, cycleStoreId:, cycleId:}
+//req object : {userId:, dealerId:, cycleStoreId:, cycleId:, rate:}
 
 async function bookCycle(req,res){
 
@@ -34,6 +34,7 @@ async function bookCycle(req,res){
     await statusModel.insertMany([{userId: req.body.userId,
                           dealerId: req.body.dealerId,
                           cycleStoreId: req.body.cycleStoreId,
+                          rate: req.body.rate,
                           cycleId: req.body.cycleId,
                           timeStart: new Date(),
                           status: 1

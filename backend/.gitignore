@@ -1,3 +1,4 @@
 node_modules
 schema/test.js
 userApi/test.js
+test/
