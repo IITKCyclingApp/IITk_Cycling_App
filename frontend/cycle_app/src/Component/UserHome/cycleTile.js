@@ -1,6 +1,6 @@
 import React from 'react';
 
-class cycleTile extends React.Component{
+class CycleTile extends React.Component{
     render()
     {
         return(
@@ -34,4 +34,4 @@ class cycleTile extends React.Component{
     }
 }
 
-export default cycleTile;
+export default CycleTile;

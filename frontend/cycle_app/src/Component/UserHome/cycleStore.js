@@ -1,7 +1,7 @@
 import React from 'react';
 import cycleTile from './cycleTile';
 
-class cycleStore extends React.Component{
+class CycleStore extends React.Component{
     render(){
         return (
             <div className="Cycle Store">
@@ -14,4 +14,4 @@ class cycleStore extends React.Component{
         )
 }
 }
-export default cycleStore;
+export default CycleStore;

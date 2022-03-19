@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import statusModel from '../schema/statusSchema.js';
+import helperFunction from './helperFunctions/availableCycle.js';
 
 
 //Link with mongodb server using mongoose
@@ -17,8 +18,21 @@ async function currentStatusUser(req,res){
 
 
     const transaction = await statusModel.find({userId: req.body.userId,$or:[{status:1},{status:2}]});
-    
-    return res.status(200).json(transaction);
+    if(transaction.length!==0){
+      const dealerId = transaction[0].dealerId;
+      const cycleStoreId = transaction[0].cycleStoreId;
+      const cycleId = transaction[0].cycleId;
+      const allCycleData = await helperFunction.allCycleData(req.body.userId);
+      const result = {
+        transaction: transaction[0],
+        allData: allCycleData[dealerId][cycleStoreId][cycleId]
+      }
+
+      return res.status(200).json(result);
+
+    }else{
+        return res.status(200).json(transaction);
+    }
 
 }
 

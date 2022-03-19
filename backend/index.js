@@ -39,11 +39,11 @@ app.post('/user/bookCycle',bookCycle);
 app.post('/user/confirmBooking',confirmBooking);
 app.post('/user/cancelBooking',cancelBooking);
 app.post('/user/deleteFavorite',deleteFavoriteCycle);
-app.get('/user/pastTransaction',pastTransactionUser);
-app.get('/user/viewCycle',viewCycleStore);
-app.get('/user/viewFavorite',viewFavoriteCycle);
-app.get('/user/viewProfile',viewProfileUser);
-app.get('/user/currentStatus',currentStatusUser);
+app.post('/user/pastTransaction',pastTransactionUser);
+app.post('/user/viewCycle',viewCycleStore);
+app.post('/user/viewFavorite',viewFavoriteCycle);
+app.post('/user/viewProfile',viewProfileUser);
+app.post('/user/currentStatus',currentStatusUser);
 
 
 //dealer
