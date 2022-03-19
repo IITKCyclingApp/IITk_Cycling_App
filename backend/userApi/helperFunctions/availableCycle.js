@@ -16,7 +16,9 @@ async function main() {
 
 async function availableCycleById(dealerId, cycleStoreId, cycleId){
 
+    console.log("DealerId ",dealerId," cyclestoreid ",cycleStoreId," cycleid ",cycleId);
     const dealerData = await dealerModel.findOne({dealerId:dealerId});
+    
     const cycleStoreData = dealerData.cycleStore;
     
     let totalCycles;                //Stores total number of cycles corresponding to dealerId, cycleStoreId and cycleId. Easier if this data is stored in statusSchema

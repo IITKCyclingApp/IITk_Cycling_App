@@ -25,7 +25,8 @@ async function currentStatusUser(req,res){
       const allCycleData = await helperFunction.allCycleData(req.body.userId);
       const result = {
         transaction: transaction[0],
-        allData: allCycleData[dealerId][cycleStoreId][cycleId]
+        allData: allCycleData[dealerId][cycleStoreId][cycleId],
+        temp:allCycleData
       }
 
       return res.status(200).json(result);

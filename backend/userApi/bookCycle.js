@@ -16,7 +16,9 @@ async function main() {
 
 async function bookCycle(req,res){
 
-    if(await helperFunction.availableCycleById(req.body.dealerId, req.body.cycleStoreId, req.body.cycleId)<=0){
+    const x = await helperFunction.availableCycleById(req.body.dealerId, req.body.cycleStoreId, req.body.cycleId);
+    
+    if(x<=0){
 
       return res.status(400).json({'msg':`Cycle not available`});
 

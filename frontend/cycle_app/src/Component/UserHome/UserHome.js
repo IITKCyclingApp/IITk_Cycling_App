@@ -20,8 +20,9 @@ class UserHome extends React.Component{
 
         super(props);
         this.state = {
-            userId:"6230cae60c6112bffebccbc2",
+            userId:"6230cae60c6112bffebccbc4",
             token:"",
+            allData:{},
             favorites:[],
             // profile:{},
             // transactions:[],
@@ -74,10 +75,16 @@ class UserHome extends React.Component{
                 res = await fetch('http://localhost:5000/user/viewFavorite',req);
                 let response2 = await res.json();
 
+
                 if(res.status===200){
 
                     // console.log("response2 ",response2);
-                    this.setState({currentCycle : !response.allData?{transaction:{status:0}}:response,favorites:response2.data});
+                    if(response.allData){
+                        this.setState({currentCycle : {transaction:response.transaction,allData:response.allData},allData:response.temp,favorites:response2.data});
+
+                    }else{
+                        this.setState({currentCycle : {transaction:{status:0}},favorites:response2.data});
+                    }
                     // console.log(this.state.currentCycle.allData);
 
                 }
@@ -95,7 +102,9 @@ class UserHome extends React.Component{
 
     async bookCycle (dealerId, cycleStoreId, cycleId, rate){
 
+        // console.log("Successful");
         try{
+            console.log("dealerId ",dealerId);
 
             // Request to bookCycle
 
@@ -115,7 +124,7 @@ class UserHome extends React.Component{
 
             };
 
-            const res = await fetch('/user/bookCycle',req);
+            const res = await fetch('http://localhost:5000/user/bookCycle',req);
             const response  = await res.json();
 
             if(res.status===200){
@@ -169,7 +178,7 @@ class UserHome extends React.Component{
 
             };
 
-            const res = await fetch('/user/confirmBooking',req);
+            const res = await fetch('http://localhost:5000/user/confirmBooking',req);
             const response  = await res.json();
 
             if(res.status===200){
@@ -219,14 +228,14 @@ class UserHome extends React.Component{
 
             };
 
-            const res = await fetch('/user/cancelBooking',req);
+            const res = await fetch('http://localhost:5000/user/cancelBooking',req);
             const response  = await res.json();
 
             if(res.status===200){
 
                 //May add pop up with response.msg
 
-                this.setState({currentCycle: {}});
+                this.setState({currentCycle: {transaction:{status:0}}});
 
             }
 
@@ -242,6 +251,8 @@ class UserHome extends React.Component{
     async addFavorite(dealerId, cycleStoreId, cycleId){
 
         try{
+
+            // console.log("dealerId: ",dealerId)
 
             // Request to addFavorite
 
@@ -260,8 +271,14 @@ class UserHome extends React.Component{
 
             };
 
-            const res = await fetch('/user/addFavorite',req);
-            const response  = await res.json();
+            let res = await fetch('http://localhost:5000/user/addFavorite',req);
+            // const response  = await res.json();
+
+            // let res = await fetch()
+
+            // this.setState({favorites:});
+
+            
 
             //No state change and re render required. Change color of star button from css
 
@@ -299,6 +316,8 @@ class UserHome extends React.Component{
 
             const res = await fetch('/user/deleteFavorite',req);
             const response  = await res.json();
+
+            // this.setState({favorites:[]});
 
             //No state change and re-render required. Change color of star button from css.
 
@@ -408,7 +427,7 @@ class UserHome extends React.Component{
                                         <a href="team.html"><i class="fa fa-plus"></i></a>
                                     </div> */}
                           <div className="overlay-content">
-                            <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
+                            <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.addFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Add to Favourites</button>
                           </div>
                         </div>
                         <div className="down-content">
@@ -458,7 +477,7 @@ class UserHome extends React.Component{
                                         <a href="team.html"><i class="fa fa-plus"></i></a>
                                     </div> */}
                           <div className="overlay-content">
-                            <button style={{"background-color":"Orange","color":"white"}}>Add to Favourites</button>
+                            <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.addFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Add to Favourites</button>
                           </div>
                         </div>
                         <div className="down-content">
@@ -490,7 +509,7 @@ class UserHome extends React.Component{
         let favorites = [];
         if(this.state.favorites){
 
-            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} />})
+            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} bookCycle={()=>{this.bookCycle(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId,favorite.cycleRate)}} deleteFavorite={()=>{this.deleteFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}}/>})
 
         }
         console.log("favorite cycle data",this.state.favorites);
@@ -524,7 +543,7 @@ class UserHome extends React.Component{
           <div className="col-md-12">
             <button id="primary-nav-button" type="button">Menu</button>
             <Link to="/"><div className="logo">
-                <img src="logo link" alt="IITK-cycling app" />
+                <img src="./img/logo.png" alt="IITK-cycling" />
               </div></Link>
             <nav id="primary-nav" className="dropdown cf">
               <ul className="dropdown menu">

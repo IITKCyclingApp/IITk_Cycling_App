@@ -84,8 +84,6 @@ class Login extends React.Component {
       <div>
         {/* <h1>This is pure html</h1> */}
         {/* navbar start */}
-        <navigate to="/user/home" />
-        <NavBar></NavBar>
         {/* navbar end */}
         <div className="main">
           <section className="sign-in" id="Sign-in">
