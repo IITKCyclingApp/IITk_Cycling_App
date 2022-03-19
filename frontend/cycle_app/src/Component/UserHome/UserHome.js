@@ -420,7 +420,7 @@ class UserHome extends React.Component{
                       <div className="featured-item">
                         <div className="thumb">
                           <div className="thumb-img">
-                            <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
+                            <img src="https://source.unsplash.com/random/720×480/?cycle" alt />
                           </div>
                           {/* Two styles of add to favourites button */}
                           {/* <div class="plus-button overlay-content">
@@ -470,7 +470,7 @@ class UserHome extends React.Component{
                       <div className="featured-item">
                         <div className="thumb">
                           <div className="thumb-img">
-                            <img src="https://source.unsplash.com/random/720×480/?fruit" alt />
+                            <img src="https://source.unsplash.com/random/720×480/?cycle" alt />
                           </div>
                           {/* Two styles of add to favourites button */}
                           {/* <div class="plus-button overlay-content">
