@@ -50,6 +50,7 @@ async function registerUser(req,res){
 
     const pass= await bcrypt.hash(req.password,saltRounds);
     await userModel.insertMany({userId:mongoose.Types.ObjectId(),name:req.name,address:req.address,contact:req.contact,favourites:[],email:req.email,roll:req.roll,password:pass})
+    res.redirect('/user/home');
     return res.status(200).json({'msg':"user Successfully registered"});
   }
 }
