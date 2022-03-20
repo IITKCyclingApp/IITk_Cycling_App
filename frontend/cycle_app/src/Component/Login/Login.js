@@ -1,10 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import NavBar from "./navBar";
 import "./reg_css/css/style.css";
 import { BrowserRouter } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
-import { Route, Navigate } from 'react-router-dom';
+// import { Route, Navigate } from 'react-router-dom';
 // const history = useHistory();
 // import { Link } from "react-router-dom";
 
@@ -12,7 +12,7 @@ import { Route, Navigate } from 'react-router-dom';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { emailUser: '', emailDealer: '', passwordUser: '', passwordDealer: '' ,userLogged:0,route:"/login"};
+    this.state = { emailUser: '', emailDealer: '', passwordUser: '', passwordDealer: '', userLogged: 0, route: "/login" };
     this.loginUser = this.loginUser.bind(this);
   }
   async loginUser() {
@@ -47,33 +47,38 @@ class Login extends React.Component {
 
         localStorage.setItem("userId", response.userId);
         localStorage.setItem("token", response.token);
-        this.setState({userLogged:1});
-         this.setState({route:"/user/home"})
+        this.setState({ userLogged: 1 });
+        this.setState({ route: "/user/home" })
         console.log("login Successful")
 
       }
       else {
         console.log(response.msg);
         alert(response.msg);
-        this.setState({userLogged:0});
+        this.setState({ userLogged: 0 });
       }
 
     } catch (err) {
 
       console.log(err);
-      this.setState({userLogged:0});
+      this.setState({ userLogged: 0 });
       // alert(err);
 
     }
-     console.log(this.state.userLogged)
-
+    console.log(this.state.userLogged)
+    
   }
 
   loginDealer() {
 
   }
-  render() {
 
+
+  render() {
+    if(this.state.userLogged==1){
+      return( <Navigate to="/user/home" replace={true} />);
+    }
+    
     return (
 
       <div>
@@ -105,12 +110,13 @@ class Login extends React.Component {
                         this.setState({ passwordUser: e.target.value });
                       }} />
                     </div>
+                    <div onClick={this.loginUser}>
+                      <Link  to={this.state.route}  ><div className="form-group form-button">
+                        <input name="signin" id="signin" className="form-submit" defaultValue="Log in" />
+                      </div>
+                      </Link>
 
-                    <Link onClick={this.loginUser} to ={this.state.route}  ><div className="form-group form-button">
-                      <input name="signin" id="signin" className="form-submit" defaultValue="Log in" />
                     </div>
-                    </Link>
-
                   </form>
                 </div>
               </div>
