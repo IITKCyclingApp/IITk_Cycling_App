@@ -1,3 +1,5 @@
+
+//for temporary purpose
 import express, { json } from 'express';
 import cors from 'cors';
 // import { route } from './routes';
@@ -27,24 +29,31 @@ import registerUser from './auth/registerUser.js';
 import registerDealer from './auth/registerDealer.js';
 import loginUser from './auth/loginUser.js'
 import loginDealer from './auth/loginDealer.js'
+import verify from './auth/middlewareVerify.js'
 //middleware
 app.use(json());
 app.use(cors());
 
+
 // app.use(express.static("./../iitk_cycling/public"));
 // app.set("view engine","ejs");
+//auth
+app.post('/registerUser',registerUser);
+app.post('/registerDealer',registerDealer);
+app.post('/loginUser',loginUser);
+app.post('/loginDealer',loginDealer);
+app.use(verify);
 //routes
-app.post('/user/addFavorite',addFavoriteCycle);
-app.post('/user/bookCycle',bookCycle);
-app.post('/user/confirmBooking',confirmBooking);
-app.post('/user/cancelBooking',cancelBooking);
-app.post('/user/deleteFavorite',deleteFavoriteCycle);
-app.post('/user/pastTransaction',pastTransactionUser);
-app.post('/user/viewCycle',viewCycleStore);
-app.post('/user/viewFavorite',viewFavoriteCycle);
-app.post('/user/viewProfile',viewProfileUser);
-app.post('/user/currentStatus',currentStatusUser);
-
+app.post('/user/addFavorite', addFavoriteCycle);
+app.post('/user/bookCycle', bookCycle);
+app.post('/user/confirmBooking', confirmBooking);
+app.post('/user/cancelBooking', cancelBooking);
+app.post('/user/deleteFavorite', deleteFavoriteCycle);
+app.post('/user/pastTransaction', pastTransactionUser);
+app.get('/user/viewCycle', viewCycleStore);
+app.get('/user/viewFavorite', viewFavoriteCycle);
+app.post('/user/viewProfile', viewProfileUser);
+app.get('/user/currentStatus', currentStatusUser);
 
 //dealer
 app.post('/addCycleStore', addCycleStore);
@@ -54,11 +63,6 @@ app.post('/deleteCycle', deleteCycle);
 app.post('/changeRate', updateCycle);
 app.post('/returnCycle', returnCycle);
 
-//auth
-app.post('/registerUser',registerUser);
-app.post('/registerDealer',registerDealer);
-app.post('/loginUser',loginUser);
-app.post('/loginDealer',loginDealer);
 // app.use(express)
 
 const port = 5000;
