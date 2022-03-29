@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 import { createRequire } from "module";
 import e from 'express';
 const require = createRequire(import.meta.url);
-const  secret = require('./config.json');
+const secret = require('./config.json');
 const jwt = require('jsonwebtoken');
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/test');
+    await mongoose.connect('mongodb://localhost:27017/test');
 }
 
 /*
@@ -17,25 +17,38 @@ async function main() {
     "userId":"623580896de98a209c0c6ce0"
 }
 */
-async function verify(req,res,next){
-    
-    if (!req.headers['authorization']){
-        return res.status(401).json({"auth":false,"msg": "Status unauthorised"});
+async function verify(req, res, next) {
+
+    if (!req.headers['authorization']) {
+        return res.status(401).json({ "auth": false, "msg": "Status unauthorised" });
     }
     let token = req.headers['authorization'].split(' ')[1];
-    if (!token){
-        return res.status(401).json({"auth":false,"msg": "Status unauthorised"});
+    if (!token) {
+        return res.status(401).json({ "auth": false, "msg": "Status unauthorised" });
     }
-    try{
+    try {
 
-        let payload = jwt.verify(token,secret.secret);
+        let payload = jwt.verify(token, secret.secret);
         console.log(payload);
-        if(payload.userId!=req.body.userId){
-            return res.status(401).json({"auth":false,"msg": "Status unauthorised ."});
+        if (req.body.userId) {
+
+            if (payload.userId != req.body.userId) {
+                return res.status(401).json({ "auth": false, "msg": "Status unauthorised ." });
+            }
+        }
+        else if (req.body.dealerId) {
+            if (payload.dealerId != req.body.dealerId) {
+                return res.status(401).json({ "auth": false, "msg": "Status unauthorised ." });
+            }
+        }
+        else {
+            return res.status(401).json({ "auth": false, "msg": "Status unauthorised ." });
+
         }
 
-    }catch(err){
-        return res.status(401).json({"auth":false,"msg": "Status unauthorised ."});
+
+    } catch (err) {
+        return res.status(401).json({ "auth": false, "msg": "Status unauthorised ." });
     }
     next();
 }

@@ -15,14 +15,15 @@ async function main() {
 }
 /*
 {
-    email:
-    password:
+  email:
+  password:
 }
 */
 async function loginDealer(req, res) {
   req = req.body;
   console.log("request for login");
   const data = await DealerModel.find({ email: req.email });
+  
   if (data.length == 0) {
     return res.status(400).json({ 'msg': "email not registered" });
   }
@@ -33,7 +34,7 @@ async function loginDealer(req, res) {
     }
     else {
       let token = jwt.sign({ DealerId: data[0].DealerId }, secret.secret, { expiresIn: 3600 });
-      return res.status(200).json({ "auth": true, "msg": "Dealer logged in successfully", "token": token ,"DealerId":data[0].DealerId});
+      return res.status(200).json({ "auth": true, "msg": "Dealer logged in successfully", "token": token ,"dealerId":data[0].dealerId});
     }
 
   }
