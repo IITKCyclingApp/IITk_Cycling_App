@@ -3,6 +3,13 @@ import React from 'react';
 class CycleTile extends React.Component{
     render()
     {
+      let button;
+
+      if(this.props.favorite){
+        button = <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.props.deleteFavorite()}}>Remove Favourites</button>
+      }else{
+        button = <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.props.addFavorite()}}>Add Favourites</button>
+      }
         return(
         <div className="col-md-4 col-sm-6 col-xs-12">
   <div className="featured-item">
@@ -15,7 +22,7 @@ class CycleTile extends React.Component{
                               <a href="team.html"><i class="fa fa-plus"></i></a>
                           </div> */}
       <div className="overlay-content">
-                            <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.props.deleteFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Remove Favourites</button>
+                            <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.props.deleteFavorite()}}>Remove Favourites</button>
                           </div>
     </div>
     <div className="down-content">

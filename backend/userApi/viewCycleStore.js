@@ -31,6 +31,7 @@ async function main() {
     //             name:
     //             rate:
     //             availableCycle:
+    //             favorite: 
     //         },
     //         cycleId2: {
 
@@ -48,6 +49,7 @@ async function viewCycleStore(req,res){
         const dealerData = await dealerModel.find({});
         
         const allAvailableCycle = await helperFunction.allCycleData(req.body.userId);
+        console.log(allAvailableCycle);
 
         let allData = {};
 

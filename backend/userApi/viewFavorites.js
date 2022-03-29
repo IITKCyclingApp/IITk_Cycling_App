@@ -21,7 +21,7 @@ async function viewFavoriteCycle(req,res){
 
 
     const currentFavorites = await userModel.findOne({userId:req.body.userId},"favorites");
-    
+    // console.log(currentFavorites);
 
     const cycleData = await helperFunction.allCycleData(req.body.userId);    // Object of form {dealerId: {cycleStoreId: {cycleId: {allData}}}}
 

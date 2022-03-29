@@ -42,7 +42,7 @@ app.post('/registerUser',registerUser);
 app.post('/registerDealer',registerDealer);
 app.post('/loginUser',loginUser);
 app.post('/loginDealer',loginDealer);
-app.use(verify);
+// app.use(verify);
 //routes
 app.post('/user/addFavorite', addFavoriteCycle);
 app.post('/user/bookCycle', bookCycle);
@@ -50,10 +50,10 @@ app.post('/user/confirmBooking', confirmBooking);
 app.post('/user/cancelBooking', cancelBooking);
 app.post('/user/deleteFavorite', deleteFavoriteCycle);
 app.post('/user/pastTransaction', pastTransactionUser);
-app.get('/user/viewCycle', viewCycleStore);
-app.get('/user/viewFavorite', viewFavoriteCycle);
+app.post('/user/viewCycle', viewCycleStore);
+app.post('/user/viewFavorite', viewFavoriteCycle);
 app.post('/user/viewProfile', viewProfileUser);
-app.get('/user/currentStatus', currentStatusUser);
+app.post('/user/currentStatus', currentStatusUser);
 
 //dealer
 app.post('/addCycleStore', addCycleStore);

@@ -158,7 +158,7 @@ class Home extends React.Component{
         </div>
         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 padding_rl">
           <div className="about-box_img">
-            <figure><img src={require("./images/about.jpg")} alt="#" /></figure>
+            <figure><img src="https://source.unsplash.com/random/739x587/?cycle" alt="#" /></figure>
           </div>
         </div>
       </div>

@@ -21,12 +21,12 @@ class UserHome extends React.Component{
         super(props);
         this.state = {
             userId:"6230cae60c6112bffebccbc4",
-            token:"",
-            allData:{},
-            favorites:[],
+            token:localStorage.getItem("token"),
+            allData:{}, // Stores all the data corresponding to all dealers, cycleStores and cycles. Initialized in component did mount
+            favorites:[], // allData[dealerId][cycleStoreId][cycleId]
             // profile:{},
             // transactions:[],
-            currentCycle:{},
+            currentCycle:{}, // currentCycle :{transaction:{}, allData:{Stores data of currently booked/ in use cycle}}
             // cycleStore: {}
         };
 
@@ -50,6 +50,7 @@ class UserHome extends React.Component{
                 },
                 body : JSON.stringify({
                   userId: this.state.userId,
+                  token:this.state.token
                 })
             };
 
@@ -69,11 +70,13 @@ class UserHome extends React.Component{
                     },
                     body : JSON.stringify({
                         userId: this.state.userId,
+                        token: this.state.token
                     })
                 };
 
                 res = await fetch('http://localhost:5000/user/viewFavorite',req);
                 let response2 = await res.json();
+                // console.log("allData : ",response.temp);
 
 
                 if(res.status===200){
@@ -85,7 +88,6 @@ class UserHome extends React.Component{
                     }else{
                         this.setState({currentCycle : {transaction:{status:0}},favorites:response2.data});
                     }
-                    // console.log(this.state.currentCycle.allData);
 
                 }
 
@@ -104,7 +106,7 @@ class UserHome extends React.Component{
 
         // console.log("Successful");
         try{
-            console.log("dealerId ",dealerId);
+            // console.log("dealerId ",dealerId);
 
             // Request to bookCycle
 
@@ -116,6 +118,7 @@ class UserHome extends React.Component{
                 },
                 body : JSON.stringify({
                     userId:this.state.userId,
+                    token: this.state.token,
                     dealerId:dealerId,
                     cycleStoreId: cycleStoreId,
                     cycleId: cycleId,
@@ -142,7 +145,8 @@ class UserHome extends React.Component{
                     cost: 0,
                     rate: rate,
                     status: 1
-                },allData:response.allData}});
+                },allData:this.state.allData[dealerId][cycleStoreId][cycleId]}});
+                
 
             }else if(res.status===400){
 
@@ -173,7 +177,8 @@ class UserHome extends React.Component{
                     'Content-Type': 'application/json',
                 },
                 body : JSON.stringify({
-                    userId:this.state.userId
+                    userId:this.state.userId,
+                    token: this.state.token
                 })
 
             };
@@ -223,7 +228,8 @@ class UserHome extends React.Component{
                     'Content-Type': 'application/json',
                 },
                 body : JSON.stringify({
-                    userId:this.state.userId
+                    userId:this.state.userId,
+                    token: this.state.token
                 })
 
             };
@@ -266,21 +272,34 @@ class UserHome extends React.Component{
                     userId:this.state.userId,
                     dealerId:dealerId,
                     cycleStoreId: cycleStoreId,
-                    cycleId: cycleId
+                    cycleId: cycleId,
+                    token: this.state.token
                 })
 
             };
 
             let res = await fetch('http://localhost:5000/user/addFavorite',req);
-            // const response  = await res.json();
+            let favorites =  this.state.favorites;
+            favorites.push(this.state.allData[dealerId][cycleStoreId][cycleId]);
 
-            // let res = await fetch()
+            let allData = this.state.allData;
+            allData[dealerId][cycleStoreId][cycleId].favorite = true;
+            
+            if(this.state.currentCycle.allData && cycleId === this.state.currentCycle.allData.cycleId){
 
-            // this.setState({favorites:});
+                let currentCycle = this.state.currentCycle;
+                currentCycle.allData.favorite = true;
+                this.setState({favorites:favorites,currentCycle:currentCycle,allData:allData});
+
+            }else{
+
+              this.setState({favorites:favorites,allData:allData});
+
+            }
 
             
 
-            //No state change and re render required. Change color of star button from css
+            //Change color of star button from css
 
         }catch(err){
 
@@ -310,16 +329,44 @@ class UserHome extends React.Component{
                     dealerId: dealerId,
                     cycleStoreId: cycleStoreId,
                     cycleId: cycleId,
+                    token: this.state.token
                 })
 
             };
 
-            const res = await fetch('/user/deleteFavorite',req);
+            const res = await fetch('http://localhost:5000/user/deleteFavorite',req);
             const response  = await res.json();
+            // console.log("Delete response ",response);
 
-            // this.setState({favorites:[]});
+            let favorites =  this.state.favorites;
+            
+            for(let i =0;i<favorites.length;i++){
 
-            //No state change and re-render required. Change color of star button from css.
+              if(favorites[i].cycleId.toString() === cycleId)
+              {
+                  favorites.splice(i,1);
+                  break;
+              }
+
+            }
+
+            let allData = this.state.allData;
+            allData[dealerId][cycleStoreId][cycleId].favorite = false;
+            // console.log(allData);
+
+            if(this.state.currentCycle.allData && cycleId === this.state.currentCycle.allData.cycleId){
+
+              let currentCycle = this.state.currentCycle;
+              currentCycle.allData.favorite = false;
+              this.setState({favorites:favorites,currentCycle:currentCycle,allData:allData});
+
+            }else{
+
+              this.setState({favorites:favorites,allData:allData});
+
+            }
+
+            //Change color of star button from css.
 
         }catch(err){
 
@@ -401,7 +448,12 @@ class UserHome extends React.Component{
               </section>);
 
             }else if(this.state.currentCycle.transaction.status===1){
-
+              let button; 
+              if(this.state.currentCycle.allData.favorite){
+                button = <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.deleteFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Remove Favourites</button>
+              }else{
+                button = <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.addFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Add Favourites</button>
+              }
                 currStatus = (<section className="featured-places">
                 <div className="container">
                   <div className="row">
@@ -427,7 +479,7 @@ class UserHome extends React.Component{
                                         <a href="team.html"><i class="fa fa-plus"></i></a>
                                     </div> */}
                           <div className="overlay-content">
-                            <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.addFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Add to Favourites</button>
+                            {button}
                           </div>
                         </div>
                         <div className="down-content">
@@ -451,7 +503,12 @@ class UserHome extends React.Component{
               </section>);
 
             }else{
-
+              let button; 
+              if(this.state.currentCycle.allData.favorite){
+                button = <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.deleteFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Remove Favourites</button>
+              }else{
+                button = <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.addFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Add Favourites</button>
+              }
                 currStatus = (<section className="featured-places">
                 <div className="container">
                   <div className="row">
@@ -477,7 +534,7 @@ class UserHome extends React.Component{
                                         <a href="team.html"><i class="fa fa-plus"></i></a>
                                     </div> */}
                           <div className="overlay-content">
-                            <button style={{"background-color":"Orange","color":"white"}} onClick={()=>{this.addFavorite(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId, this.state.currentCycle.allData.cycleId)}}>Add to Favourites</button>
+                            {button}
                           </div>
                         </div>
                         <div className="down-content">
@@ -509,10 +566,11 @@ class UserHome extends React.Component{
         let favorites = [];
         if(this.state.favorites){
 
-            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} bookCycle={()=>{this.bookCycle(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId,favorite.cycleRate)}} deleteFavorite={()=>{this.deleteFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}}/>})
+            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} bookCycle={()=>{this.bookCycle(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId,favorite.cycleRate)}} addFavorite={()=>{this.addFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}} isFavorite={favorite.favorite} deleteFavorite={()=>{this.deleteFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}}/>})
 
         }
-        console.log("favorite cycle data",this.state.favorites);
+
+        console.log(currStatus);
 
 
         return(
@@ -548,8 +606,8 @@ class UserHome extends React.Component{
             <nav id="primary-nav" className="dropdown cf">
               <ul className="dropdown menu">
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/store">Store</Link></li>
-                <li><Link to="/profile">My Profile</Link></li>
+                <li><Link to="/user/store">Store</Link></li>
+                <li><Link to="/user/profile">My Profile</Link></li>
               </ul>
             </nav>{/* / #primary-nav */}
           </div>
@@ -559,7 +617,7 @@ class UserHome extends React.Component{
   </div>
   {/* Navbar end */}
   {/* Banner start */}
-  <section className="banner" id="top" style={{"background-image":"url(https://source.unsplash.com/random/1920×700/?cycle)"}}>
+  <section className="banner banner-primary" id="top" style={{"background-image":"url(https://source.unsplash.com/random/1920×700/?cycle)"}}>
     {/* <div className="container" > */}
       <div className="row">
         <div className="col-md-10 col-md-offset-1">

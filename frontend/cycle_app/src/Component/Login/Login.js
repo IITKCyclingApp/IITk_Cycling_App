@@ -1,8 +1,8 @@
 import React from "react";
 import { Link, Navigate } from "react-router-dom";
-import NavBar from "./navBar";
+// import NavBar from "./navBar";
 import "./reg_css/css/style.css";
-import { BrowserRouter } from "react-router-dom";
+// import { BrowserRouter } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
 // import { Route, Navigate } from 'react-router-dom';
 // const history = useHistory();

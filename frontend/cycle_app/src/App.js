@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './Component/Home/Home';
 import Login from './Component/Login/Login';
 import UserHome from './Component/UserHome/UserHome';
+import UserStore from './Component/UserStore/UserStore';
 import DealerHome from './Component/dealerHome/dealerHome';
 // import UserProfile from './Component/UserProfile/UserProfile';
 // import LoginPage from './pages/login'
@@ -21,6 +22,7 @@ export default function App() {
                     <Route path="/" element={ <Home /> } />
                     <Route path="/login" element={ <Login /> } />
                     <Route path="/user/home" element={ <UserHome /> } />
+                    <Route path="/user/store" element={<UserStore/>}/>
                     <Route path="/dealer/home" element={<DealerHome/>}/>
                     {/* <Route path="/user/profile" element={ <UserProfile /> } /> */}
 
