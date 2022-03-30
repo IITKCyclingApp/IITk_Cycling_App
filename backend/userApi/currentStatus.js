@@ -19,11 +19,13 @@ async function currentStatusUser(req,res){
 
     const transaction = await statusModel.find({userId: req.body.userId,$or:[{status:1},{status:2}]});
     console.log(transaction);
+    const allCycleData = await helperFunction.allCycleData(req.body.userId);
+
     if(transaction.length!==0){
       const dealerId = transaction[0].dealerId;
       const cycleStoreId = transaction[0].cycleStoreId;
       const cycleId = transaction[0].cycleId;
-      const allCycleData = await helperFunction.allCycleData(req.body.userId);
+      
       const result = {
         transaction: transaction[0],
         allData: allCycleData[dealerId][cycleStoreId][cycleId],
@@ -34,7 +36,8 @@ async function currentStatusUser(req,res){
       return res.status(200).json(result);
 
     }else{
-        return res.status(200).json(transaction);
+      
+        return res.status(200).json({temp:allCycleData});
     }
 
 }

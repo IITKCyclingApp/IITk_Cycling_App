@@ -1,9 +1,7 @@
 // import { profile } from 'console';
 import React from 'react';
-import {Link} from 'react-router-dom';
-import NavBar from './navBar';
-import CycleStore from './cycleStore';
-import CurStatus from './curStatus';
+import {Link, Navigate} from 'react-router-dom';
+
 // import CycleTile from './cycleTile';
 import "./css/bootstrap.min.css";
 import "./css/bootstrap-theme.min.css";
@@ -20,14 +18,13 @@ class UserHome extends React.Component{
 
         super(props);
         this.state = {
-            userId:"6230cae60c6112bffebccbc4",
-            token:localStorage.getItem("token"),
+            userId:"62430b8db20a63ebd7a347ea",
+            token:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQzMGI4ZGIyMGE2M2ViZDdhMzQ3ZWEiLCJpYXQiOjE2NDg2NDQyMDAsImV4cCI6MTY0ODY0NzgwMH0.KFSj5u36eA8x-9r1cnFFokWDusX35Zr9wtUqE-kk7yE",
+            toLogin:false,
             allData:{}, // Stores all the data corresponding to all dealers, cycleStores and cycles. Initialized in component did mount
             favorites:[], // allData[dealerId][cycleStoreId][cycleId]
-            // profile:{},
-            // transactions:[],
             currentCycle:{}, // currentCycle :{transaction:{}, allData:{Stores data of currently booked/ in use cycle}}
-            // cycleStore: {}
+            
         };
 
     };
@@ -82,14 +79,18 @@ class UserHome extends React.Component{
                 if(res.status===200){
 
                     // console.log("response2 ",response2);
-                    if(response.allData){
+                    if(response.allData){     // allData stores all data about current booked cycle. temp stores all data of all cycles
                         this.setState({currentCycle : {transaction:response.transaction,allData:response.allData},allData:response.temp,favorites:response2.data});
 
                     }else{
-                        this.setState({currentCycle : {transaction:{status:0}},favorites:response2.data});
+                        this.setState({currentCycle : {transaction:{status:0}},allData:response.temp,favorites:response2.data});
                     }
 
                 }
+
+            }else{
+                alert(response.msg);
+                this.setState({toLogin:true})
 
             }
 
@@ -134,6 +135,8 @@ class UserHome extends React.Component{
 
                 //May add pop up with response.msg
 
+                console.log("All data ",this.state.allData);
+
                 this.setState({currentCycle: {transaction:{
                     userId: this.state.userId,
                     dealerId: dealerId,
@@ -152,7 +155,11 @@ class UserHome extends React.Component{
 
                 alert(response.msg);
 
-            }
+            }else{
+              alert(response.msg);
+              this.setState({toLogin:true})
+
+          }
 
         }catch(err){
 
@@ -203,7 +210,11 @@ class UserHome extends React.Component{
                     status: 2
                 },allData:this.state.currentCycle.allData}});
 
-            }
+            }else{
+              alert(response.msg);
+              this.setState({toLogin:true})
+
+          }
 
         }catch(err){
 
@@ -243,7 +254,11 @@ class UserHome extends React.Component{
 
                 this.setState({currentCycle: {transaction:{status:0}}});
 
-            }
+            }else{
+              alert(response.msg);
+              this.setState({toLogin:true})
+
+          }
 
         }catch(err){
 
@@ -426,6 +441,12 @@ class UserHome extends React.Component{
 
     render(){
 
+      if(this.state.toLogin){
+
+        return(<Navigate to="/login" replace={true} />)
+
+      }
+
         let currStatus;
 
         if(this.state.currentCycle.transaction){
@@ -566,11 +587,11 @@ class UserHome extends React.Component{
         let favorites = [];
         if(this.state.favorites){
 
-            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} bookCycle={()=>{this.bookCycle(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId,favorite.cycleRate)}} addFavorite={()=>{this.addFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}} isFavorite={favorite.favorite} deleteFavorite={()=>{this.deleteFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}}/>})
+            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} bookCycle={()=>{this.bookCycle(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId,favorite.cycleRate)}} addFavorite={()=>{this.addFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}} isFavorite={favorite.favorite}  deleteFavorite={()=>{this.deleteFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}}/>})
 
         }
 
-        console.log(currStatus);
+        // console.log(currStatus);
 
 
         return(
@@ -682,14 +703,15 @@ class UserHome extends React.Component{
         <div className="col-md-4">
           <div className="useful-links">
             <div className="footer-heading">
-              <h4>what we have to offer for you?</h4>
+              <h4>What we have to offer for you?</h4>
             </div>
             <div className="row">
               <div className="col-md-6">
                 <ul>
                   <li><Link to="/"><i className="fa fa-stop" />Home</Link></li>
-                  <li><Link to="/store"><i className="fa fa-stop" />Store</Link></li>
-                  <li><Link to="/profile"><i className="fa fa-stop" />Profile</Link></li>
+                  <li><Link to="/user/home"><i className="fa fa-stop" />Dashboard</Link></li>
+                  <li><Link to="/user/store"><i className="fa fa-stop" />Store</Link></li>
+                  <li><Link to="/user/profile"><i className="fa fa-stop" />Profile</Link></li>
                 </ul>
               </div>
             </div>

@@ -81,7 +81,8 @@ async function viewCycleStore(req,res){
                     dealerEmail: dealer.email,
                     cycleStoreAddress: cycleStore.address,
                     cycleStoreContact: cycleStore.contact,
-                    cycles: cycleObject
+                    cycles: cycleObject,
+                    show: false
                 }
 
             })

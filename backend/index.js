@@ -42,7 +42,7 @@ app.post('/registerUser',registerUser);
 app.post('/registerDealer',registerDealer);
 app.post('/loginUser',loginUser);
 app.post('/loginDealer',loginDealer);
-// app.use(verify);
+app.use(verify);
 //routes
 app.post('/user/addFavorite', addFavoriteCycle);
 app.post('/user/bookCycle', bookCycle);

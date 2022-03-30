@@ -26,16 +26,16 @@ class Home extends React.Component{
   <link rel="stylesheet" href="css/style.css" />
   <link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900" rel="stylesheet" />
   {/* Navbar */}
-  <nav className="navbar navbar-expand-lg navbar-light bg-light">
-    <div className="container-fluid">
+  {/* <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <div className="container-fluid"> */}
       <a className="navbar-brand">IITK-Cycling App</a>
-      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon" />
-      </button>
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+      </button> */}
+      {/* <div className="collapse navbar-collapse" id="navbarSupportedContent"> */}
+        {/* <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item" style={{"-webkit-align-items":"right","-webkit-box-align":"right","-ms-flex-align":"right","align-items":"right"}}>
-            <Link className="nav-link active" aria-current="page" to="/">Home</Link>
+            <Link className="nav-link active" aria-current="page" to="/user/home">Dashboard</Link>
           </li>
           <li className="nav-item" style={{"-webkit-align-items":"right","-webkit-box-align":"right","-ms-flex-align":"right","align-items":"right"}}>
             <a className="nav-link active" aria-current="page" href="#about">About</a>
@@ -44,12 +44,20 @@ class Home extends React.Component{
             <a className="nav-link active" aria-current="page" href="#contact">Contact</a>
           </li>
           <li className="nav-item" style={{"-webkit-text-align":"right","text-align":"right"}}>
-            <Link className="nav-link active" aria-current="page" to="/login">Login/Sign-Up</Link>
+            <Link className="nav-link active" aria-current="page" to="/login">Login</Link>
           </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+        </ul> */}
+        <nav id="primary-nav" className="dropdown cf">
+                        <ul className="dropdown menu">
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/user/home">Dashboard</Link></li>
+                        <li><Link to="/user/store">Store</Link></li>
+                        <li><Link to="/user/profile">My Profile</Link></li>
+                        </ul>
+                    </nav>{/* / #primary-nav */}
+      {/* </div> */}
+    {/* </div>
+  </nav> */}
   {/* Navbar end */}
 
   <section className="slider_section">
@@ -99,7 +107,7 @@ class Home extends React.Component{
                 </div>
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                   <div className="images_box">
-                    <figure><img src="https://source.unsplash.com/random/739x587/?cycle" /></figure>
+                    <figure><img src="https://source.unsplash.com/random/740x587/?abstract" /></figure>
                   </div>
                 </div>
               </div>
@@ -158,7 +166,7 @@ class Home extends React.Component{
         </div>
         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 padding_rl">
           <div className="about-box_img">
-            <figure><img src="https://source.unsplash.com/random/739x587/?cycle" alt="#" /></figure>
+            <figure><img src="https://source.unsplash.com/random/740x587/?cycle" alt="#" /></figure>
           </div>
         </div>
       </div>
