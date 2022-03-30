@@ -12,8 +12,9 @@ import "./reg_css/css/style.css";
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { emailUser: '', emailDealer: '', passwordUser: '', passwordDealer: '', userLogged: 0, route: "/login" };
+    this.state = { emailUser: '', emailDealer: '', passwordUser: '', passwordDealer: '', userLogged: 0, route: '', nameUser: '', emailUserRegister: '', rollUser: '', passwordUserRegister: '', confirmPasswordUser: '', addressUser: '', contactUser: '' };
     this.loginUser = this.loginUser.bind(this);
+    this.registerUser = this.registerUser.bind(this);
   }
   async loginUser() {
     const email = this.state.emailUser;
@@ -66,7 +67,68 @@ class Login extends React.Component {
 
     }
     console.log(this.state.userLogged)
+
+  }
+  async registerUser() {
+    const email = this.state.emailUserRegister;
+    const pass = this.state.passwordUserRegister;
+    const name = this.state.nameUser;
+    const roll = this.state.rollUser;
+    const address = this.state.contactUser;
+    const contact = this.state.contactUser;
+    const confirmPassword = this.state.confirmPasswordUser;
+
     
+    try {
+
+      // Request to cancelBooking
+
+      const req = {
+        method: 'POST',
+        headers: {
+          'authorization': this.state.token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+
+          roll: roll,
+          address: address,
+          contact: contact,
+          email: email,
+          password: pass,
+          confirmPassword: confirmPassword
+
+        })
+
+      };
+
+      const res = await fetch('http://localhost:5000/RegisterUser', req);
+      const response = await res.json();
+
+      console.log(res.status);
+      if (res.status === 200) {
+
+        
+        alert("Registration successful, kindly Login")
+        console.log("Register Successful")
+
+      }
+      else {
+        console.log(response.msg);
+        alert(response.msg);
+        this.setState({ userLogged: 0 });
+      }
+
+    } catch (err) {
+
+      console.log(err);
+      this.setState({ userLogged: 0 });
+      // alert(err);
+
+    }
+    console.log(this.state.userLogged)
+
   }
 
   loginDealer() {
@@ -75,10 +137,10 @@ class Login extends React.Component {
 
 
   render() {
-    if(this.state.userLogged==1){
-      return( <Navigate to="/user/home" replace={true} />);
+    if (this.state.userLogged == 1) {
+      return (<Navigate to="/user/home" replace={true} />);
     }
-    
+
     return (
 
       <div>
@@ -86,7 +148,7 @@ class Login extends React.Component {
         {/* navbar start */}
         {/* navbar end */}
         <div className="main">
-          <section className="sign-in" id="Sign-in">
+          <section className="sign-in" id="Sign-in-User">
             <div className="container">
               <div className="signin-content">
                 <div className="signin-image">
@@ -94,7 +156,7 @@ class Login extends React.Component {
                   <a href="#Sign-up" className="signup-image-link">Don't have an account?</a>
                 </div>
                 <div className="signin-form">
-                  <h2 className="form-title">Login</h2>
+                  <h2 className="form-title">Login User</h2>
                   <form className="register-form" id="login-form">
                     <div className="form-group">
                       <label htmlFor="your_name"><i className="zmdi zmdi-account material-icons-name" /></label>
@@ -109,8 +171,8 @@ class Login extends React.Component {
                       }} />
                     </div>
                     <div onClick={this.loginUser}>
-                      <Link  to={this.state.route}  ><div className="form-group form-button">
-                        <input name="signin" id="signin" className="form-submit" defaultValue="Log in" />
+                      <Link to={this.state.route}  ><div className="form-group form-button">
+                        <button className="form-group form-button">Log In </button>
                       </div>
                       </Link>
 
@@ -129,33 +191,60 @@ class Login extends React.Component {
             <div className="container">
               <div className="signup-content">
                 <div className="signup-form">
-                  <h2 className="form-title">Sign up</h2>
-                  <form method="POST" className="register-form" id="register-form">
+                  <h2 className="form-title">Register User</h2>
+                  <form  className="register-form" id="register-form">
                     <div className="form-group">
                       <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
-                      <input type="text" name="name" id="name" placeholder="Your Name" />
+                      <input type="text" name="name" id="name" placeholder="Your Name" value={this.state.nameUser} onChange={(e) => {
+                        this.setState({ nameUser: e.target.value });
+                      }} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
+                      <input type="text" name="roll" id="roll" placeholder="Your Roll number" value={this.state.rollUser} onChange={(e) => {
+                        this.setState({ rollUser: e.target.value });
+                      }} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
+                      <input type="text" name="address" id="address" placeholder="Your Address" value={this.state.addressUser} onChange={(e) => {
+                        this.setState({ addressUser: e.target.value });
+                      }} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
+                      <input type="text" name="contact" pattern="[6789][0-9]{9}" id="contact" placeholder="Your Contact" value={this.state.contactUser} onChange={(e) => {
+                        this.setState({ contactUser: e.target.value });
+                      }} />
                     </div>
                     <div className="form-group">
                       <label htmlFor="email"><i className="zmdi zmdi-email" /></label>
-                      <input type="email" name="email" id="email" placeholder="Your Email" />
+                      <input type="email" name="email" pattern=".+@iitk.ac.in" id="email" placeholder="Your Email" value={this.state.emailUserRegister} onChange={(e) => {
+                        this.setState({ emailUserRegister: e.target.value });
+                      }} />
                     </div>
                     <div className="form-group">
                       <label htmlFor="pass"><i className="zmdi zmdi-lock" /></label>
-                      <input type="password" name="pass" id="pass" placeholder="Password" />
+                      <input type="password" name="pass" id="pass" placeholder="Password" value={this.state.passwordUserRegister} onChange={(e) => {
+                        this.setState({ passwordUserRegister: e.target.value });
+                      }} />
                     </div>
                     <div className="form-group">
                       <label htmlFor="re-pass"><i className="zmdi zmdi-lock-outline" /></label>
-                      <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" />
+                      <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" value={this.state.confirmPasswordUser} onChange={(e) => {
+                        this.setState({ confirmPasswordUser: e.target.value });
+                      }} />
                     </div>
-                    <div className="form-group form-button">
-                      <input type="submit" name="signup" id="signup" className="form-submit" defaultValue="Register" />
+
+                    <Link to={"/login#Sign-in-User"} onClick={this.registerUser} ><div className="form-group form-button">
+                      <button className="form-group form-button p-x10"> Register User</button>
                     </div>
+                    </Link>
+
+
                   </form>
                 </div>
-                <div className="signup-image">
-                  <figure><img src="https://source.unsplash.com/random/292x350/?network" alt="sing up image" /></figure>
-                  <a href="#Sign-in" className="signup-image-link">Already a member?</a>
-                </div>
+
               </div>
             </div>
           </section>
