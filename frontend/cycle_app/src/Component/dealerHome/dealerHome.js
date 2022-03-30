@@ -1,23 +1,21 @@
 // import { profile } from 'console';
 import React, { createContext } from 'react';
-import { Link } from 'react-router-dom';
-import NavBar from './navBar';
-import CycleStore from './cycleStore';
-// import CycleTile from './cycleTile';
+import { Link, Navigate } from 'react-router-dom';
 import "./css/bootstrap.min.css";
 import "./css/bootstrap-theme.min.css";
 import "./css/fontAwesome.css";
 import "./css/hero-slider.css";
 import "./css/owl-carousel.css";
 import "./css/style.css";
-import CycleTile from './cycleTile';
+import CycleStore from './cycleStore';
 class dealerHome extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dealerId: "6230cae60c6112bffebccbc2",
-            token: "",
-            stores: []
+            dealerId: localStorage.getItem("dealerId"),
+            token: localStorage.getItem("token"),
+            stores: [],
+            loggedIn: 1
         }
         this.getData = this.getData.bind(this);
     }
@@ -30,8 +28,9 @@ class dealerHome extends React.Component {
 
     async getData() {
         // const dealerId = localStorage.getItem("dealerId");
-        const dealerId="507f191e810c19729de860ea";
+        const dealerId = localStorage.getItem("dealerId");
         const token = localStorage.getItem("token");
+
         this.setState({ dealerId: dealerId, token: token });
         console.log(token);
         try {
@@ -41,11 +40,11 @@ class dealerHome extends React.Component {
             const req = {
                 method: 'POST',
                 headers: {
-                    'authorization':this.state.token,
+                    'authorization': `Bearer ${this.state.token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    dealerId:dealerId
+                    dealerId: dealerId
 
                 })
 
@@ -53,30 +52,93 @@ class dealerHome extends React.Component {
 
             const res = await fetch('http://localhost:5000/user/viewcycle', req);
             const response = await res.json();
-            
+            console.log(response);
             if (res.status === 200) {
-                console.log("ho gaya ");
+                console.log("data fetched successfully ");
+                this.setState({ stores: response })
             }
             else {
                 console.log(response.msg);
+                this.setState({ loggedIn: 0 });
             }
 
         } catch (err) {
 
             console.log(err);
+            this.setState({ loggedIn: 0 });
             // alert(err);
 
         }
 
 
-        // console.log(response);
     }
+    changeShow(cycleStoreId){
 
+        let cycleStore = this.state.stores;
+        cycleStore[cycleStoreId].show = !cycleStore[cycleStoreId].show;
+        this.setState({cycleStore:cycleStore});
+
+    }
 
     render() {
         // this.getData();
         // setInterval(this.getData,2000);
+        if (!this.state.loggedIn) {
+            return (<Navigate to="/login" replace={true} />)
+        }
+        // const cycleStores = this.state.stores;
+        // var storeJsx = "";
+        // var i;
+        // for (i = 0; i < cycleStores.length; i++) {
+        //     var j;
+        //     let cycle;
+        //     for (j = 0; j < cycleStores[i].length; j++) {
+        //         cycle=(<div className="col-md-4 col-sm-6 col-xs-12">
+        //             <div className="featured-item">
+        //                 <div className="thumb">
+        //                     <div className="thumb-img">
+        //                         <img src="https://source.unsplash.com/random/720×480/?cycle" alt />
+        //                     </div>
+        //                     {/* Two styles of add to favourites button */}
+        //                     {/* <div class="plus-button overlay-content">
+        //                       <a href="team.html"><i class="fa fa-plus"></i></a>
+        //                   </div> */}
+                            
+        //                 </div>
+        //                 <div className="down-content">
+        //                     <h4 id="cycleName">Cycle Name : {this.props.name}</h4>
+        //                     <h4 id="cycleRate">Cycle Rate : {this.props.rate}</h4>
+        //                     <h4 id="cycleCount">Cycles Available : {this.props.available}</h4>
+        //                     <h4 id="dealerNumber">Dealer Contact Number : {this.props.contact}</h4>
+        //                     <h4 id="dealerNumber">Pick Up Address : {this.props.address}</h4>
+        //                     {/* <h4 id="bookingTime">Booking Time : {this.props.booking_time}</h4> */}
+        //                     <br />
+        //                     <div className="text-button">
+        //                         <a onClick={() => this.props.bookCycle()} style={{ cursor: "pointer" }}><strong>Rent</strong></a>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>)
+        //     }
+        //     storeJsx=storeJsx+cycle;
+        // }
+        // console.log(storeJsx)
+        let jsx = [];
+        let cycleStore = this.state.stores;
+        jsx.push(<div class="my-10"></div>)
 
+        if(cycleStore){
+            
+            // console.log(cycleStore);
+            for(let i in this.state.stores){
+
+                console.log("i = ",i);
+                jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={()=>{this.changeShow(i)}} addFavorite={this.addFavorite} deleteFavorite={this.deleteFavorite} bookCycle={this.bookCycle}/>)
+    
+            }   
+
+        }
+        console.log(jsx);
 
         return (
             <div>
@@ -143,9 +205,19 @@ class dealerHome extends React.Component {
                     {/* Store section */}
 
                     {/* Store section */}
-                    {this.state.stores.map(() => { })
-                    }
-
+                {jsx}
+                {/* <Link to={"/addCycleStore"}><button type="button" class="btn btn-outline-primary">Add Cycle Store</button></Link> */}
+                <section className="featured-places" >
+                <Link to="/addCycleStore"><div className="container">
+                    <div className="row">
+                        <center>
+                            <input type="button" defaultValue="Add Cyle Store"style={{ "text-shadow": "2px 2px grey", "height": "105px", "font-size": "25px", "background-image": "url('https://source.unsplash.com/random/720×480/?pink')", "color": "white" }} />
+                            <br /><br /><hr /><br />
+                            
+                        </center>
+                    </div>
+                </div></Link> 
+            </section>
                 </main>
                 {/* Footer start */}
                 <footer>

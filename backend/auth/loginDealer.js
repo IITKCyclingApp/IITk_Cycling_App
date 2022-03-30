@@ -21,6 +21,7 @@ async function main() {
 */
 async function loginDealer(req, res) {
   req = req.body;
+  
   console.log("request for login");
   const data = await DealerModel.find({ email: req.email });
   
@@ -30,10 +31,10 @@ async function loginDealer(req, res) {
   else {
     const pass = bcrypt.compareSync(req.password, data[0].password);
     if (pass == false) {
-      return res.status(404).json({ 'msg': "email and password do not match" });
+      return res.status(401).json({ 'msg': "email and password do not match" });
     }
     else {
-      let token = jwt.sign({ DealerId: data[0].DealerId }, secret.secret, { expiresIn: 3600 });
+      let token = jwt.sign({ dealerId: data[0].dealerId }, secret.secret, { expiresIn: 3600 });
       return res.status(200).json({ "auth": true, "msg": "Dealer logged in successfully", "token": token ,"dealerId":data[0].dealerId});
     }
 

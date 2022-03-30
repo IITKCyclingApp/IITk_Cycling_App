@@ -12,9 +12,14 @@ import "./reg_css/css/style.css";
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { emailUser: '', emailDealer: '', passwordUser: '', passwordDealer: '', userLogged: 0, route: '', nameUser: '', emailUserRegister: '', rollUser: '', passwordUserRegister: '', confirmPasswordUser: '', addressUser: '', contactUser: '' };
+    this.state = {
+      emailUser: '', emailDealer: '', userLogged: 0, route: '', nameUser: '', emailUserRegister: '', rollUser: '', passwordUserRegister: '', confirmPasswordUser: '', addressUser: '', contactUser: '',
+      emailDealer: '', emailDealer: '', dealerLogged: 0, route: '', nameDealer: '', emailDealerRegister: '', rollDealer: '', passwordDealerRegister: '', confirmPasswordDealer: '', addressDealer: '', contactDealer: ''
+    };
     this.loginUser = this.loginUser.bind(this);
     this.registerUser = this.registerUser.bind(this);
+    this.loginDealer = this.loginDealer.bind(this);
+    this.registerDealer = this.registerDealer.bind(this)
   }
   async loginUser() {
     const email = this.state.emailUser;
@@ -78,7 +83,7 @@ class Login extends React.Component {
     const contact = this.state.contactUser;
     const confirmPassword = this.state.confirmPasswordUser;
 
-    
+
     try {
 
       // Request to cancelBooking
@@ -109,7 +114,7 @@ class Login extends React.Component {
       console.log(res.status);
       if (res.status === 200) {
 
-        
+
         alert("Registration successful, kindly Login")
         console.log("Register Successful")
 
@@ -130,17 +135,128 @@ class Login extends React.Component {
     console.log(this.state.userLogged)
 
   }
+  async loginDealer() {
+    const email = this.state.emailDealer;
+    const pass = this.state.passwordDealer;
 
-  loginDealer() {
+    console.log(email);
+    console.log(pass);
+    try {
+
+      // Request to cancelBooking
+
+      const req = {
+        method: 'POST',
+        headers: {
+          'authorization': this.state.token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: pass
+
+        })
+
+      };
+
+      const res = await fetch('http://localhost:5000/loginDealer', req);
+      const response = await res.json();
+
+      if (res.status === 200) {
+
+
+        localStorage.setItem("dealerId", response.dealerId);
+        localStorage.setItem("token", response.token);
+        this.setState({ dealerLogged: 1 });
+        this.setState({ route: "/dealer/home" })
+        console.log("login Successful")
+
+      }
+      else {
+        console.log(response.msg);
+        alert(response.msg);
+        this.setState({ dealerLogged: 0 });
+      }
+
+    } catch (err) {
+
+      console.log(err);
+      this.setState({ dealerLogged: 0 });
+      // alert(err);
+
+    }
+    console.log(this.state.dealerLogged)
 
   }
+  async registerDealer() {
+    const email = this.state.emailDealerRegister;
+    const pass = this.state.passwordDealerRegister;
+    const name = this.state.nameDealer;
+
+    const address = this.state.contactDealer;
+    const contact = this.state.contactDealer;
+    const confirmPassword = this.state.confirmPasswordDealer;
+
+
+    try {
+
+      // Request to cancelBooking
+
+      const req = {
+        method: 'POST',
+        headers: {
+          'authorization': this.state.token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+          address: address,
+          contact: contact,
+          email: email,
+          password: pass,
+          confirmPassword: confirmPassword
+
+        })
+
+      };
+
+      const res = await fetch('http://localhost:5000/RegisterDealer', req);
+      const response = await res.json();
+
+      console.log(res.status);
+      if (res.status === 200) {
+
+
+        alert("Registration successful, kindly Login")
+        console.log("Register Successful")
+
+      }
+      else {
+        console.log(response.msg);
+        alert(response.msg);
+        this.setState({ dealerLogged: 0 });
+      }
+
+    } catch (err) {
+
+      console.log(err);
+      this.setState({ dealerLogged: 0 });
+      // alert(err);
+
+    }
+    console.log(this.state.dealerLogged)
+
+  }
+
 
 
   render() {
     if (this.state.userLogged == 1) {
       return (<Navigate to="/user/home" replace={true} />);
     }
-
+    if (this.state.dealerLogged == 1) {
+      return (<Navigate to="/dealer/home" replace={true} />);
+    }
     return (
 
       <div>
@@ -192,7 +308,7 @@ class Login extends React.Component {
               <div className="signup-content">
                 <div className="signup-form">
                   <h2 className="form-title">Register User</h2>
-                  <form  className="register-form" id="register-form">
+                  <form className="register-form" id="register-form">
                     <div className="form-group">
                       <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
                       <input type="text" name="name" id="name" placeholder="Your Name" value={this.state.nameUser} onChange={(e) => {
@@ -244,7 +360,111 @@ class Login extends React.Component {
 
                   </form>
                 </div>
+                <div className="signup-image">
+                  <figure><img src="https://source.unsplash.com/random/292x350/?network" alt="sing up image" /></figure>
+                  <a href="#Sign-in" className="signup-image-link">Already a member?</a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div className="main">
+          <section className="sign-in" id="Sign-in-Dealer">
+            <div className="container">
+              <div className="signin-content">
+                <div className="signin-image">
+                  <figure><img src="https://source.unsplash.com/random/292x350/?computer" alt="sing up image" /></figure>
+                  <a href="#Sign-up" className="signup-image-link">Don't have an account?</a>
+                </div>
+                <div className="signin-form">
+                  <h2 className="form-title">Login Dealer</h2>
+                  <form className="register-form" id="login-form">
+                    <div className="form-group">
+                      <label htmlFor="your_name"><i className="zmdi zmdi-account material-icons-name" /></label>
+                      <input type="text" name="your_name" id="dealer_email" placeholder="Email" value={this.state.emailDealer} onChange={(e) => {
+                        this.setState({ emailDealer: e.target.value });
+                      }} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="your_pass"><i className="zmdi zmdi-lock" /></label>
+                      <input type="password" name="your_pass" id="dealer_password" placeholder="Password" value={this.state.passwordDealer} onChange={(e) => {
+                        this.setState({ passwordDealer: e.target.value });
+                      }} />
+                    </div>
+                    <div onClick={this.loginDealer}>
+                      <Link to={this.state.route}  ><div className="form-group form-button">
+                        <button className="form-group form-button">Log In </button>
+                      </div>
+                      </Link>
 
+                    </div>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </section>
+          {/*spacers*/}
+          <br />
+          <br />
+          <br />
+          {/* Sign up form */}
+          <section className="signup" id="Sign-up">
+            <div className="container">
+              <div className="signup-content">
+                <div className="signup-form">
+                  <h2 className="form-title">Register Dealer</h2>
+                  <form className="register-form" id="register-form">
+                    <div className="form-group">
+                      <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
+                      <input type="text" name="name" id="name" placeholder="Your Name" value={this.state.nameDealer} onChange={(e) => {
+                        this.setState({ nameDealer: e.target.value });
+                      }} />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
+                      <input type="text" name="address" id="address" placeholder="Your Address" value={this.state.addressDealer} onChange={(e) => {
+                        this.setState({ addressDealer: e.target.value });
+                      }} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
+                      <input type="text" name="contact" pattern="[6789][0-9]{9}" id="contact" placeholder="Your Contact" value={this.state.contactDealer} onChange={(e) => {
+                        this.setState({ contactDealer: e.target.value });
+                      }} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="email"><i className="zmdi zmdi-email" /></label>
+                      <input type="email" name="email" pattern=".+@iitk.ac.in" id="email" placeholder="Your Email" value={this.state.emailDealerRegister} onChange={(e) => {
+                        this.setState({ emailDealerRegister: e.target.value });
+                      }} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="pass"><i className="zmdi zmdi-lock" /></label>
+                      <input type="password" name="pass" id="pass" placeholder="Password" value={this.state.passwordDealerRegister} onChange={(e) => {
+                        this.setState({ passwordDealerRegister: e.target.value });
+                      }} />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="re-pass"><i className="zmdi zmdi-lock-outline" /></label>
+                      <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" value={this.state.confirmPasswordDealer} onChange={(e) => {
+                        this.setState({ confirmPasswordDealer: e.target.value });
+                      }} />
+                    </div>
+
+                    <Link to={"/login#Sign-in-Dealer"} onClick={this.registerDealer} ><div className="form-group form-button">
+                      <button className="form-group form-button p-x10"> Register Dealer</button>
+                    </div>
+                    </Link>
+
+
+                  </form>
+                </div>
+                <div className="signup-image">
+                  <figure><img src="https://source.unsplash.com/random/292x350/?network" alt="sing up image" /></figure>
+                  <a href="#Sign-in" className="signup-image-link">Already a member?</a>
+                </div>
               </div>
             </div>
           </section>
