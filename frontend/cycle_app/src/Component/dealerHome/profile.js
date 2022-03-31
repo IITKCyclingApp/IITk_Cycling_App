@@ -8,18 +8,21 @@ import "./css/hero-slider.css";
 import "./css/owl-carousel.css";
 import "./css/style.css";
 import CycleStore from './cycleStore';
-class dealerHome extends React.Component {
+class dealerProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             dealerId: localStorage.getItem("dealerId"),
             token: localStorage.getItem("token"),
-            bookedCycles: [],
             usedCycles:[],
-            loggedIn: 1
+            bookedCycles:[],
+            loggedIn: 1,
+            name: '',
+            email: '',
+            address: '',
+            contact: ''
         }
         this.getData = this.getData.bind(this);
-        
     }
 
     componentDidMount() {
@@ -52,12 +55,15 @@ class dealerHome extends React.Component {
 
             };
 
-            const res = await fetch('http://localhost:5000/user/viewcycle', req);
+            const res = await fetch('http://localhost:5000/dealerProfile', req);
             const response = await res.json();
             console.log(response);
             if (res.status === 200) {
-                console.log("data fetched successfully ");
-                this.setState({ stores: response })
+                console.log("Profile info success ");
+                this.setState({name:response.name});
+                this.setState({email:response.email});
+                this.setState({contact:response.contact});
+                this.setState({address:response.address});
             }
             else {
                 console.log(response.msg);
@@ -71,18 +77,6 @@ class dealerHome extends React.Component {
             // alert(err);
 
         }
-
-
-    }
-    changeShow(cycleStoreId) {
-
-        let cycleStore = this.state.stores;
-        cycleStore[cycleStoreId].show = !cycleStore[cycleStoreId].show;
-        this.setState({ cycleStore: cycleStore });
-
-    }
-    async deleteCycle(dealerId, cycleStoreId, cycleId) {
-        console.log(cycleId);
         try {
 
             // Request to cancelBooking
@@ -94,45 +88,37 @@ class dealerHome extends React.Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    cycleStoreId: cycleStoreId,
-                    dealerId: dealerId,
-                    cycleId: cycleId
+                    dealerId: dealerId
 
                 })
 
             };
 
-            const res = await fetch('http://localhost:5000/deleteCycle', req);
+            const res = await fetch('http://localhost:5000/rentCycles', req);
             const response = await res.json();
-
+            console.log(response);
             if (res.status === 200) {
-                alert("Cycle deleted Successfully")
-                this.getData();
+                console.log("Used Cycles success ");
+                this.setState({usedCycles:response});
+                
             }
             else {
                 console.log(response.msg);
-                alert(response.msg);
-                this.setState({ loggedIn: 0 })
-
+                // this.setState({ loggedIn: 0 });
             }
 
         } catch (err) {
 
             console.log(err);
-            this.setState({ loggedIn: 0 })
-
+            // this.setState({ loggedIn: 0 });
             // alert(err);
 
         }
 
-    }
-    async editCycle(dealerId, cycleStoreId, cycleId) {
-        console.log(cycleId);
-        console.log(cycleStoreId);
-        localStorage.setItem('cycleStoreId', cycleStoreId);
-        localStorage.setItem('cycleId', cycleId);
 
     }
+   
+    
     render() {
         // this.getData();
         // setInterval(this.getData,2000);
@@ -201,9 +187,10 @@ class dealerHome extends React.Component {
                         <div className="col-md-10 col-md-offset-1">
                             <div className="banner-caption">
                                 <div className="line-dec" />
-                                <h2 style={{ "color": "White" ,"text-shadow":"2px 2px black" }}>Welcome.</h2>
+                                <h2 style={{ "color": "White", "text-shadow": "2px 2px black" }}>Welcome.</h2>
                                 {/* <div className="blue-button">
-                                    <Link to="/dealer/profile">Profile</Link>
+                                    <Link to="/dealer/home" style={{"z-index":100}}>Home</Link>
+                                    <a href="/">sme</a>
                                 </div> */}
                                 <div className="line-dec" />
                             </div>
@@ -218,6 +205,29 @@ class dealerHome extends React.Component {
 
 
                 <main>
+                    <section class="our-services">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="left-content">
+                                        <h2 id="username" >{this.state.name}</h2>
+                                        <h3>
+                                           { this.state.contact}
+                                        </h3>
+                                        <h3>
+                                           { this.state.email}
+                                        </h3>
+                                        <h3>
+                                           { this.state.address}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <img src="https://techcrunch.com/wp-content/uploads/2014/10/facebook-anonymous-blur.jpg?w=730" class="img-fluid" alt="Add an image here"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                     {/* Store section */}
                     {/* {currStatus} */}
                     {/* Store section */}
@@ -299,4 +309,4 @@ class dealerHome extends React.Component {
 
     }
 }
-export default dealerHome;
+export default dealerProfile;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Navigate, matchRoutes } from 'react-router-dom';
 import "../Login/reg_css/css/style.css";
-class addCycle extends React.Component {
+class editCycle extends React.Component {
 
  
     constructor(props) {
@@ -13,17 +13,17 @@ class addCycle extends React.Component {
             token: localStorage.getItem("token"),
             // cycleStoreId:"6244954717628323f150259d",
             cycleStoreId:localStorage.getItem("cycleStoreId"),
-            cycleName:"",
-            rate:"",
-            totalCycles:"",
+           
+            newRate:"",
+            newTotalCycles:"",
             loggedIn:1
             
         }
-        this.addCycle = this.addCycle.bind(this);
+        this.editCycle = this.editCycle.bind(this);
 
 
     }
-    async addCycle() {
+    async editCycle() {
         
 
 
@@ -40,31 +40,30 @@ class addCycle extends React.Component {
                 body: JSON.stringify({
                     cycleStoreId:this.state.cycleStoreId,
                     dealerId:this.state.dealerId,
-                    rate:parseInt(this.state.rate),
-                    totalCycles:parseInt(this.state.totalCycles),
-                    cycleName:this.state.cycleName
-                
+                    newRate:parseInt(this.state.newRate),
+                    newTotalCycles:parseInt(this.state.newTotalCycles),
+                    cycleId:localStorage.getItem("cycleId")
                 })
 
             };
 
-            const res = await fetch('http://localhost:5000/addCycle', req);
+            const res = await fetch('http://localhost:5000/editCycle', req);
             const response = await res.json();
 
             if (res.status === 200) {
-                alert("Cycle Added Successfully")
+                alert("Cycle Updated Successfully")
             }
             else {
                 console.log(response.msg);
                 alert(response.msg);
-                // this.setState({loggedIn:0})
+                this.setState({loggedIn:0})
                 
             }
             
         } catch (err) {
             
             console.log(err);
-            // this.setState({loggedIn:0})
+            this.setState({loggedIn:0})
             
             // alert(err);
 
@@ -74,9 +73,9 @@ class addCycle extends React.Component {
 
     render() {
         
-        // if (!this.state.loggedIn) {
-        //     return (<Navigate to="/login" replace={true} />)
-        // }
+        if (!this.state.loggedIn) {
+            return (<Navigate to="/login" replace={true} />)
+        }
 
         return (
             <div><meta charSet="utf-8" />
@@ -119,29 +118,24 @@ class addCycle extends React.Component {
                                 <div className="signup-form">
                                     <h2 className="form-title">Add Cycle</h2>
                                     <form className="register-form" id="register-form">
-                                        <div className="form-group">
-                                            <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
-                                            <input type="text" name="name" id="name" placeholder="Name of Cycle" value={this.state.cycleName} onChange={(e) => {
-                                                this.setState({ cycleName: e.target.value });
-                                            }} />
-                                        </div>
+                                        
 
                                         <div className="form-group">
                                             <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
-                                            <input type="text" name="address" id="address" placeholder="Rate" value={this.state.rate} onChange={(e) => {
-                                                this.setState({ rate: e.target.value });
+                                            <input type="text" name="address" id="address" placeholder="Rate" value={this.state.newRate} onChange={(e) => {
+                                                this.setState({ newRate: e.target.value });
                                             }} />
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="name"><i className="zmdi zmdi-account material-icons-name" /></label>
-                                            <input type="text" name="address" id="address" placeholder="Total Cycles" value={this.state.totalCycles} onChange={(e) => {
-                                                this.setState({ totalCycles: e.target.value });
+                                            <input type="text" name="address" id="address" placeholder="Total Cycles" value={this.state.newTotalCycles} onChange={(e) => {
+                                                this.setState({ newTotalCycles: e.target.value });
                                             }} />
                                         </div>
 
 
-                                        <Link to={"/dealer/home"} onClick={this.addCycle} ><div className="form-group form-button">
-                                            <button className="form-group form-button p-x10"> Add Cycle</button>
+                                        <Link to={"/dealer/home"} onClick={this.editCycle} ><div className="form-group form-button">
+                                            <button className="form-group form-button p-x10"> Edit Cycle</button>
                                         </div>
                                         </Link>
 
@@ -161,4 +155,4 @@ class addCycle extends React.Component {
     }
 }
 
-export default addCycle;
+export default editCycle;

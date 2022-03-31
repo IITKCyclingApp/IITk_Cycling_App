@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link, Navigate, matchRoutes } from 'react-router-dom';
 class CycleTile extends React.Component{
 
 
@@ -42,7 +42,7 @@ class CycleTile extends React.Component{
       {/* <h4 id="bookingTime">Booking Time : {this.props.booking_time}</h4> */}
       <br />
       <div className="text-button">
-        <a onClick={()=>this.props.bookCycle()} style={{cursor:"pointer"}}><strong>Rent</strong></a>
+        <Link to={"/editCycle"} onClick={()=>this.props.editCycle()} style={{cursor:"pointer"}}><strong>Edit</strong></Link>
       </div>
     </div>
   </div>

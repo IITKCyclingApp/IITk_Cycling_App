@@ -72,11 +72,11 @@ class CycleStore extends React.Component {
 
             for (let i in allData.cycles) {
                 console.log(allData.cycles)
-                cycles.push(<CycleTile token={this.state.token} name={allData.cycles[i].name} address={allData.cycleStoreAddress} contact={allData.cycleStoreContact} rate={allData.cycles[i].rate} bookCycle={() => { this.props.bookCycle(allData.dealerId, allData.cycleStoreId, allData.cycles[i].cycleId, allData.cycles[i].rate) }} addFavorite={() => { this.props.addFavorite(allData.dealerId, allData.cycleStoreId, allData.cycles[i].cycleId) }} isFavorite={allData.cycles[i].favorite} available={allData.cycles[i].availableCycle} deleteCycle={() => { this.props.deleteCycle(allData.dealerId, cycleStoreId, i) }} />)
+                cycles.push(<CycleTile token={this.state.token} name={allData.cycles[i].name} address={allData.cycleStoreAddress} contact={allData.cycleStoreContact} rate={allData.cycles[i].rate} editCycle={() => { this.props.editCycle(allData.dealerId, cycleStoreId,i) }} addFavorite={() => { this.props.addFavorite(allData.dealerId, allData.cycleStoreId, allData.cycles[i].cycleId) }} isFavorite={allData.cycles[i].favorite} available={allData.cycles[i].availableCycle} deleteCycle={() => { this.props.deleteCycle(allData.dealerId, cycleStoreId, i) }} />)
                 console.log(cycleStoreId)
 
             }
-            cycles.push((<Link to={``} onClick={()=>{localStorage.setItem("cycleStoreId", cycleStoreId)}}> <div className="col-md-4 col-sm-6 col-xs-12 h-29">
+            cycles.push((<Link to={`/addCycle`} onClick={localStorage.setItem("cycleStoreId", cycleStoreId)}> <div className="col-md-4 col-sm-6 col-xs-12 h-29">
                 <div className="featured-item  d-flex justify-content-center">
 
                     <div className="down-content py-5 ">

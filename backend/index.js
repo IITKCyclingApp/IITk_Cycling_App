@@ -23,7 +23,8 @@ import deleteCycle from './dealerApi/deleteCycle.js';
 import updateCycle from './dealerApi/updateCycle.js';
 
 import returnCycle from './dealerApi/returnCycle.js';
-
+import dealerProfile from './dealerApi/dealerProfile.js'
+import currentRentCycle from './dealerApi/currentRentcycle.js';
 //auth
 import registerUser from './auth/registerUser.js';
 import registerDealer from './auth/registerDealer.js';
@@ -60,8 +61,10 @@ app.post('/addCycleStore', addCycleStore);
 app.post('/deleteCycleStore', deleteCycleStore);
 app.post('/addCycle', addCycle);
 app.post('/deleteCycle', deleteCycle);
-app.post('/changeRate', updateCycle);
+app.post('/editCycle', updateCycle);
 app.post('/returnCycle', returnCycle);
+app.post('/dealerProfile',dealerProfile);
+app.post('/rentCycles',currentRentCycle);
 
 // app.use(express)
 

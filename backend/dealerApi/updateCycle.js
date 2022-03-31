@@ -28,6 +28,7 @@ async function main() {
 */
 async function updateCycle(req, res) {
     const data = req.body;
+    console.log(data);
     console.log("request to cycle update");
     await dealerModel.updateOne({ dealerId: data.dealerId }, {
         "cycleStore.$[elem].cycles.$[elem2].totalCycles": data.newTotalCycles,

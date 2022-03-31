@@ -29,6 +29,7 @@ async function addCycle(req, res) {
   const data = req.body;
   console.log("request to add cycle");
   await dealerModel.updateOne({ dealerId: data.dealerId }, { $push: { "cycleStore.$[elem].cycles": { name: data.cycleName, cycleId: mongoose.Types.ObjectId(), rate: data.rate, totalCycles: data.totalCycles } } },{arrayFilters:[{"elem.cycleStoreId":data.cycleStoreId}]});
+ 
   res.status(200).json({ 'msg': 'cycle added successfully' });
 }
 export default addCycle;
