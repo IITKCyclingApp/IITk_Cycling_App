@@ -1,5 +1,5 @@
 import React from 'react';
-import CycleTile from '../UserHome/cycleTile';
+import CycleTile from './cycleTile';
 import { Link, Navigate } from 'react-router-dom';
 class CycleStore extends React.Component {
 
@@ -9,37 +9,93 @@ class CycleStore extends React.Component {
         super(props);
         this.state = {
 
-            "token": this.props.token
-
+            "token": this.props.token,
+            "cycledeleted":1
         }
+        this.deleteCycleStore = this.deleteCycleStore.bind(this);
 
 
     }
+    async deleteCycleStore() {
+        try {
+
+            // Request to cancelBooking
+
+            const req = {
+                method: 'POST',
+                headers: {
+                    'authorization': `Bearer ${this.state.token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cycleStoreId: this.props.cycleStoreId,
+                    dealerId: this.props.allData.dealerId,
+
+                })
+
+            };
+
+            const res = await fetch('http://localhost:5000/deleteCycleStore', req);
+            const response = await res.json();
+
+            if (res.status === 200) {
+                // alert("Cycle Store deleted Successfully")
+                alert("Cycle Store Deleted Successfully");
+            }
+            else {
+                console.log(response.msg);
+                alert(response.msg);
+                this.setState({ loggedIn: 0 })
+
+            }
+
+        } catch (err) {
+
+            console.log(err);
+            this.setState({ loggedIn: 0 })
+
+            // alert(err);
+
+        }
+        window.location.reload(false)
+        
+    }   
 
     render() {
 
         let cycles = [];
 
         let allData = this.props.allData;
-        let cycleStoreId=this.props.cycleStoreId;
+        let cycleStoreId = this.props.cycleStoreId;
 
         if (allData.show) {
 
             for (let i in allData.cycles) {
-
-                cycles.push(<CycleTile token={this.state.token} name={allData.cycles[i].name} address={allData.cycleStoreAddress} contact={allData.cycleStoreContact} rate={allData.cycles[i].rate} bookCycle={() => { this.props.bookCycle(allData.dealerId, allData.cycleStoreId, allData.cycles[i].cycleId, allData.cycles[i].rate) }} addFavorite={() => { this.props.addFavorite(allData.dealerId, allData.cycleStoreId, allData.cycles[i].cycleId) }} isFavorite={allData.cycles[i].favorite} available={allData.cycles[i].availableCycle} deleteFavorite={() => { this.props.deleteFavorite(allData.dealerId, allData.cycleStoreId, allData.cycles[i].cycleId) }} />)
+                console.log(allData.cycles)
+                cycles.push(<CycleTile token={this.state.token} name={allData.cycles[i].name} address={allData.cycleStoreAddress} contact={allData.cycleStoreContact} rate={allData.cycles[i].rate} bookCycle={() => { this.props.bookCycle(allData.dealerId, allData.cycleStoreId, allData.cycles[i].cycleId, allData.cycles[i].rate) }} addFavorite={() => { this.props.addFavorite(allData.dealerId, allData.cycleStoreId, allData.cycles[i].cycleId) }} isFavorite={allData.cycles[i].favorite} available={allData.cycles[i].availableCycle} deleteCycle={() => { this.props.deleteCycle(allData.dealerId, cycleStoreId, i) }} />)
                 console.log(cycleStoreId)
 
             }
-            cycles.push(<Link to={ `/addCycle` } onClick={localStorage.setItem("cycleStoreId",cycleStoreId)}> <div className="col-md-4 col-sm-6 col-xs-12 h-29">
-            <div className="featured-item  d-flex justify-content-center">
-                
+            cycles.push((<Link to={``} onClick={()=>{localStorage.setItem("cycleStoreId", cycleStoreId)}}> <div className="col-md-4 col-sm-6 col-xs-12 h-29">
+                <div className="featured-item  d-flex justify-content-center">
+
                     <div className="down-content py-5 ">
-                       <h1>Add Cycle</h1> 
-                        
+                        <h1>Add Cycle</h1>
+
+                    </div>
                 </div>
-            </div>
-        </div></Link> )
+            </div></Link>));
+
+            cycles.push((<Link to={'/dealer/home'} onClick={()=>{ this.deleteCycleStore(); }}><div className="col-md-4 col-sm-6 col-xs-12 h-29">
+                <div className="featured-item  d-flex justify-content-center">
+                    <div>
+                        <div className="down-content py-5 ">
+                            <h1>DeleteCycleStore</h1>
+
+                        </div></div>
+                </div>
+            </div></Link>))
+
 
         }
 

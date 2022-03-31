@@ -18,6 +18,7 @@ class dealerHome extends React.Component {
             loggedIn: 1
         }
         this.getData = this.getData.bind(this);
+        this.deleteCycle = this.deleteCycle.bind(this);
     }
 
     componentDidMount() {
@@ -79,50 +80,59 @@ class dealerHome extends React.Component {
         this.setState({cycleStore:cycleStore});
 
     }
+    async deleteCycle(dealerId,cycleStoreId,cycleId){
+        console.log(cycleId);
+        try {
 
+            // Request to cancelBooking
+
+            const req = {
+                method: 'POST',
+                headers: {
+                    'authorization': `Bearer ${this.state.token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cycleStoreId:cycleStoreId,
+                    dealerId:dealerId,
+                    cycleId:cycleId
+
+                })
+
+            };
+
+            const res = await fetch('http://localhost:5000/deleteCycle', req);
+            const response = await res.json();
+
+            if (res.status === 200) {
+                alert("Cycle deleted Successfully")
+                this.getData();
+            }
+            else {
+                console.log(response.msg);
+                alert(response.msg);
+                this.setState({loggedIn:0})
+                
+            }
+            
+        } catch (err) {
+            
+            console.log(err);
+            this.setState({loggedIn:0})
+            
+            // alert(err);
+
+        }
+
+    }
     render() {
         // this.getData();
         // setInterval(this.getData,2000);
         if (!this.state.loggedIn) {
             return (<Navigate to="/login" replace={true} />)
         }
-        // const cycleStores = this.state.stores;
-        // var storeJsx = "";
-        // var i;
-        // for (i = 0; i < cycleStores.length; i++) {
-        //     var j;
-        //     let cycle;
-        //     for (j = 0; j < cycleStores[i].length; j++) {
-        //         cycle=(<div className="col-md-4 col-sm-6 col-xs-12">
-        //             <div className="featured-item">
-        //                 <div className="thumb">
-        //                     <div className="thumb-img">
-        //                         <img src="https://source.unsplash.com/random/720×480/?cycle" alt />
-        //                     </div>
-        //                     {/* Two styles of add to favourites button */}
-        //                     {/* <div class="plus-button overlay-content">
-        //                       <a href="team.html"><i class="fa fa-plus"></i></a>
-        //                   </div> */}
-                            
-        //                 </div>
-        //                 <div className="down-content">
-        //                     <h4 id="cycleName">Cycle Name : {this.props.name}</h4>
-        //                     <h4 id="cycleRate">Cycle Rate : {this.props.rate}</h4>
-        //                     <h4 id="cycleCount">Cycles Available : {this.props.available}</h4>
-        //                     <h4 id="dealerNumber">Dealer Contact Number : {this.props.contact}</h4>
-        //                     <h4 id="dealerNumber">Pick Up Address : {this.props.address}</h4>
-        //                     {/* <h4 id="bookingTime">Booking Time : {this.props.booking_time}</h4> */}
-        //                     <br />
-        //                     <div className="text-button">
-        //                         <a onClick={() => this.props.bookCycle()} style={{ cursor: "pointer" }}><strong>Rent</strong></a>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </div>)
-        //     }
-        //     storeJsx=storeJsx+cycle;
-        // }
-        // console.log(storeJsx)
+        
+        
         let jsx = [];
         let cycleStore = this.state.stores;
         jsx.push(<div class="my-10"></div>)
@@ -133,7 +143,7 @@ class dealerHome extends React.Component {
             for(let i in this.state.stores){
 
                 console.log("i = ",i);
-                jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={()=>{this.changeShow(i)}} addFavorite={this.addFavorite} deleteFavorite={this.deleteFavorite} bookCycle={this.bookCycle}/>)
+                jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={()=>{this.changeShow(i)}} addFavorite={this.addFavorite} deleteCycle={this.deleteCycle} bookCycle={this.bookCycle}/>)
     
             }   
 
