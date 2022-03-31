@@ -29,16 +29,17 @@ async function verify(req, res, next) {
     try {
 
         let payload = jwt.verify(token, secret.secret);
-        console.log(payload);
+       
         if (req.body.userId) {
 
             if (payload.userId != req.body.userId) {
-                return res.status(401).json({ "auth": false, "msg": "Status unauthorised ." });
+                return res.status(401).json({ "auth": false, "msg": "Status unauthorised user." });
             }
         }
         else if (req.body.dealerId) {
+            
             if (payload.dealerId != req.body.dealerId) {
-                return res.status(401).json({ "auth": false, "msg": "Status unauthorised ." });
+                return res.status(401).json({ "auth": false, "msg": "Status unauthorised dealer." });
             }
         }
         else {

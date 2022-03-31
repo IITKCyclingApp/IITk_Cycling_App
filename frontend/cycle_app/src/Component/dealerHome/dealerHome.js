@@ -1,25 +1,24 @@
 // import { profile } from 'console';
 import React, { createContext } from 'react';
-import { Link } from 'react-router-dom';
-import NavBar from './navBar';
-import CycleStore from './cycleStore';
-// import CycleTile from './cycleTile';
+import { Link, Navigate } from 'react-router-dom';
 import "./css/bootstrap.min.css";
 import "./css/bootstrap-theme.min.css";
 import "./css/fontAwesome.css";
 import "./css/hero-slider.css";
 import "./css/owl-carousel.css";
 import "./css/style.css";
-import CycleTile from './cycleTile';
+import CycleStore from './cycleStore';
 class dealerHome extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dealerId: "6230cae60c6112bffebccbc2",
-            token: "",
-            stores: []
+            dealerId: localStorage.getItem("dealerId"),
+            token: localStorage.getItem("token"),
+            stores: [],
+            loggedIn: 1
         }
         this.getData = this.getData.bind(this);
+        this.deleteCycle = this.deleteCycle.bind(this);
     }
 
     componentDidMount() {
@@ -30,8 +29,9 @@ class dealerHome extends React.Component {
 
     async getData() {
         // const dealerId = localStorage.getItem("dealerId");
-        const dealerId="507f191e810c19729de860ea";
+        const dealerId = localStorage.getItem("dealerId");
         const token = localStorage.getItem("token");
+
         this.setState({ dealerId: dealerId, token: token });
         console.log(token);
         try {
@@ -41,11 +41,11 @@ class dealerHome extends React.Component {
             const req = {
                 method: 'POST',
                 headers: {
-                    'authorization':this.state.token,
+                    'authorization': `Bearer ${this.state.token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    dealerId:dealerId
+                    dealerId: dealerId
 
                 })
 
@@ -53,30 +53,102 @@ class dealerHome extends React.Component {
 
             const res = await fetch('http://localhost:5000/user/viewcycle', req);
             const response = await res.json();
-            
+            console.log(response);
             if (res.status === 200) {
-                console.log("ho gaya ");
+                console.log("data fetched successfully ");
+                this.setState({ stores: response })
             }
             else {
                 console.log(response.msg);
+                this.setState({ loggedIn: 0 });
             }
 
         } catch (err) {
 
             console.log(err);
+            this.setState({ loggedIn: 0 });
             // alert(err);
 
         }
 
 
-        // console.log(response);
     }
+    changeShow(cycleStoreId){
 
+        let cycleStore = this.state.stores;
+        cycleStore[cycleStoreId].show = !cycleStore[cycleStoreId].show;
+        this.setState({cycleStore:cycleStore});
 
+    }
+    async deleteCycle(dealerId,cycleStoreId,cycleId){
+        console.log(cycleId);
+        try {
+
+            // Request to cancelBooking
+
+            const req = {
+                method: 'POST',
+                headers: {
+                    'authorization': `Bearer ${this.state.token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cycleStoreId:cycleStoreId,
+                    dealerId:dealerId,
+                    cycleId:cycleId
+
+                })
+
+            };
+
+            const res = await fetch('http://localhost:5000/deleteCycle', req);
+            const response = await res.json();
+
+            if (res.status === 200) {
+                alert("Cycle deleted Successfully")
+                this.getData();
+            }
+            else {
+                console.log(response.msg);
+                alert(response.msg);
+                this.setState({loggedIn:0})
+                
+            }
+            
+        } catch (err) {
+            
+            console.log(err);
+            this.setState({loggedIn:0})
+            
+            // alert(err);
+
+        }
+
+    }
     render() {
         // this.getData();
         // setInterval(this.getData,2000);
+        if (!this.state.loggedIn) {
+            return (<Navigate to="/login" replace={true} />)
+        }
+        
+        
+        let jsx = [];
+        let cycleStore = this.state.stores;
+        jsx.push(<div class="my-10"></div>)
 
+        if(cycleStore){
+            
+            // console.log(cycleStore);
+            for(let i in this.state.stores){
+
+                console.log("i = ",i);
+                jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={()=>{this.changeShow(i)}} addFavorite={this.addFavorite} deleteCycle={this.deleteCycle} bookCycle={this.bookCycle}/>)
+    
+            }   
+
+        }
+        console.log(jsx);
 
         return (
             <div>
@@ -143,9 +215,19 @@ class dealerHome extends React.Component {
                     {/* Store section */}
 
                     {/* Store section */}
-                    {this.state.stores.map(() => { })
-                    }
-
+                {jsx}
+                {/* <Link to={"/addCycleStore"}><button type="button" class="btn btn-outline-primary">Add Cycle Store</button></Link> */}
+                <section className="featured-places" >
+                <Link to="/addCycleStore"><div className="container">
+                    <div className="row">
+                        <center>
+                            <input type="button" defaultValue="Add Cyle Store"style={{ "text-shadow": "2px 2px grey", "height": "105px", "font-size": "25px", "background-image": "url('https://source.unsplash.com/random/720×480/?pink')", "color": "white" }} />
+                            <br /><br /><hr /><br />
+                            
+                        </center>
+                    </div>
+                </div></Link> 
+            </section>
                 </main>
                 {/* Footer start */}
                 <footer>

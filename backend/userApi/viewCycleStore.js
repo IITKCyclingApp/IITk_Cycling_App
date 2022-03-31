@@ -90,7 +90,6 @@ async function viewCycleStore(req, res) {
                 })
             }
 
-
         })
 
     }

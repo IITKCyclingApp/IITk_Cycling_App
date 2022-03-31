@@ -6,6 +6,8 @@ import Login from './Component/Login/Login';
 import UserHome from './Component/UserHome/UserHome';
 import UserStore from './Component/UserStore/UserStore';
 import DealerHome from './Component/dealerHome/dealerHome';
+import AddCycleStore from './Component/dealerHome/addCycleStore'
+import AddCycle from './Component/dealerHome/addCycle'
 // import UserProfile from './Component/UserProfile/UserProfile';
 // import LoginPage from './pages/login'
 // import RegisterPage from './pages/register'
@@ -24,6 +26,8 @@ export default function App() {
                     <Route path="/user/home" element={ <UserHome /> } />
                     <Route path="/user/store" element={<UserStore/>}/>
                     <Route path="/dealer/home" element={<DealerHome/>}/>
+                    <Route path="/addCycleStore" element={<AddCycleStore/>}/>
+                    <Route path="/addCycle" element={<AddCycle/>}/>
                     {/* <Route path="/user/profile" element={ <UserProfile /> } /> */}
 
                 </Routes>
