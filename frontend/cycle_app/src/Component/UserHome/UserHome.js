@@ -18,8 +18,8 @@ class UserHome extends React.Component{
 
         super(props);
         this.state = {
-            userId:"62430b8db20a63ebd7a347ea",
-            token:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQzMGI4ZGIyMGE2M2ViZDdhMzQ3ZWEiLCJpYXQiOjE2NDg2NDQyMDAsImV4cCI6MTY0ODY0NzgwMH0.KFSj5u36eA8x-9r1cnFFokWDusX35Zr9wtUqE-kk7yE",
+          userId:localStorage.getItem("userId"),
+          token:`Bearer ${localStorage.getItem("token")}`,
             toLogin:false,
             allData:{}, // Stores all the data corresponding to all dealers, cycleStores and cycles. Initialized in component did mount
             favorites:[], // allData[dealerId][cycleStoreId][cycleId]
@@ -58,6 +58,36 @@ class UserHome extends React.Component{
             if(res.status===200){
 
                 //Request to viewCycle
+
+                setInterval(()=>{
+                  let time = new Date();
+                  let trans = this.state.currentCycle.transaction;
+                  if(trans.status == 1){
+
+                    if(time-trans.timeStart>7200000){
+  
+                      this.cancelBooking(trans.dealerId,trans.cycleStoreId,trans.cycleId);
+  
+                    }
+
+                  }
+                },300000);
+
+                setInterval(()=>{
+
+                  let time = new Date();
+                  let trans = this.state.currentCycle.transaction;
+                  let currentCycle = this.state.currentCycle;
+                  if(trans.status == 2){
+
+                    let time_diff = (time - trans.timeStart)/3600000;
+                    currentCycle.transaction.cost = time_diff * trans.rate;
+                    this.setState({currentCycle:currentCycle});                
+
+
+                }},300000);
+
+
 
                 req = {
                     method : 'POST',
@@ -137,6 +167,9 @@ class UserHome extends React.Component{
 
                 console.log("All data ",this.state.allData);
 
+                let allData = this.state.allData;
+                allData[dealerId][cycleStoreId][cycleId].countAvailable-=1;
+
                 this.setState({currentCycle: {transaction:{
                     userId: this.state.userId,
                     dealerId: dealerId,
@@ -148,7 +181,7 @@ class UserHome extends React.Component{
                     cost: 0,
                     rate: rate,
                     status: 1
-                },allData:this.state.allData[dealerId][cycleStoreId][cycleId]}});
+                },allData:this.state.allData[dealerId][cycleStoreId][cycleId]},allData:allData});
                 
 
             }else if(res.status===400){
@@ -226,7 +259,7 @@ class UserHome extends React.Component{
     }
 
 
-    async cancelBooking (){
+    async cancelBooking (dealerId, cycleStoreId, cycleId){
 
         try{
 
@@ -252,7 +285,10 @@ class UserHome extends React.Component{
 
                 //May add pop up with response.msg
 
-                this.setState({currentCycle: {transaction:{status:0}}});
+                let allData = this.state.allData;
+                allData[dealerId][cycleStoreId][cycleId].countAvailable += 1;
+
+                this.setState({currentCycle: {transaction:{status:0}},allData:allData});
 
             }else{
               alert(response.msg);
@@ -513,7 +549,7 @@ class UserHome extends React.Component{
                             <a onClick={()=>this.confirmBooking()} style={{cursor:"pointer"}}><strong>Confirm Booking</strong></a>
                           </div>
                           <div className="text-button">
-                            <a onClick={()=>this.cancelBooking()} style={{cursor:"pointer"}}><strong>Cancel Booking</strong></a>
+                            <a onClick={()=>this.cancelBooking(this.state.currentCycle.allData.dealerId,this.state.currentCycle.allData.cycleStoreId,this.state.currentCycle.allData.cycleId)} style={{cursor:"pointer"}}><strong>Cancel Booking</strong></a>
                           </div>
                         </div>
                       </div>
@@ -587,7 +623,7 @@ class UserHome extends React.Component{
         let favorites = [];
         if(this.state.favorites){
 
-            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} bookCycle={()=>{this.bookCycle(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId,favorite.cycleRate)}} addFavorite={()=>{this.addFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}} isFavorite={favorite.favorite}  deleteFavorite={()=>{this.deleteFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}}/>})
+            favorites = this.state.favorites.map((favorite) =>{return <CycleTile name={favorite.cycleName} address={favorite.cycleStoreAddress} contact={favorite.cycleStoreContact} rate={favorite.cycleRate} bookCycle={()=>{this.bookCycle(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId,favorite.cycleRate)}} addFavorite={()=>{this.addFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}} isFavorite={favorite.favorite} available={this.state.allData[favorite.dealerId][favorite.cycleStoreId][favorite.cycleId].countAvailable} deleteFavorite={()=>{this.deleteFavorite(favorite.dealerId,favorite.cycleStoreId,favorite.cycleId)}}/>})
 
         }
 
@@ -657,7 +693,9 @@ class UserHome extends React.Component{
   {/* Banner end */}
   <main>
     {/* Store section */}
-    {currStatus}
+    <center>
+      {currStatus}
+    </center>
     {/* Store section */}
     
     {/* Store section */}
@@ -674,8 +712,11 @@ class UserHome extends React.Component{
         </div> 
         <div className="row">
           {/* This one element contains a card to hold one cycle*/}
+          
+          {favorites}
+          
           {/* Cycle card start */}
-         {favorites}
+         
           {/* Cycle card end */}
         </div>
       </div>

@@ -3,17 +3,9 @@ import React from 'react';
 class CycleTile extends React.Component{
 
 
-    constructor(props){
+    
 
-      super(props);
-      this.state = {
-
-        "token":this.props.token
-
-      }
-
-
-    }
+    
 
     render()
     {

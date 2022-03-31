@@ -21,8 +21,8 @@ class UserStore extends React.Component{
 
         super(props);
         this.state = {
-            userId:"62430b8db20a63ebd7a347ea",
-            token:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjQzMGI4ZGIyMGE2M2ViZDdhMzQ3ZWEiLCJpYXQiOjE2NDg2NDQyMDAsImV4cCI6MTY0ODY0NzgwMH0.KFSj5u36eA8x-9r1cnFFokWDusX35Zr9wtUqE-kk7yE",
+            userId:localStorage.getItem("userId"),
+              token:`Bearer ${localStorage.getItem("token")}`,
             toLogin:false,
             // allData:{}, // Stores all the data corresponding to all dealers, cycleStores and cycles. Initialized in component did mount
             favorites:[], // allData[dealerId][cycleStoreId][cycleId]
@@ -108,176 +108,7 @@ class UserStore extends React.Component{
 
     }
 
-    async bookCycle (dealerId, cycleStoreId, cycleId, rate){
-
-        
-        try{
-
-            // Request to bookCycle
-
-            const req = {
-                method : 'POST',
-                headers : {
-                    'authorization' : this.state.token, 
-                    'Content-Type': 'application/json',
-                },
-                body : JSON.stringify({
-                    userId:this.state.userId,
-                    token: this.state.token,
-                    dealerId:dealerId,
-                    cycleStoreId: cycleStoreId,
-                    cycleId: cycleId,
-                    rate: rate
-                })
-
-            };
-
-            const res = await fetch('http://localhost:5000/user/bookCycle',req);
-            const response  = await res.json();
-
-             if(res.status===400){
-
-                alert(response.msg);
-
-            }else{
-
-                this.setState({toLogin:true});
-
-            }
-
-        }catch(err){
-
-            console.log(err);
-            alert(err);
-
-        }
-
-    }
-
-
-
-    async addFavorite(dealerId, cycleStoreId, cycleId){
-
-        try{
-
-            // console.log("dealerId: ",dealerId)
-
-            // Request to addFavorite
-
-            const req = {
-                method : 'POST',
-                headers : {
-                    'authorization' : this.state.token, 
-                    'Content-Type': 'application/json',
-                },
-                body : JSON.stringify({
-                    userId:this.state.userId,
-                    dealerId:dealerId,
-                    cycleStoreId: cycleStoreId,
-                    cycleId: cycleId,
-                    token: this.state.token
-                })
-
-            };
-
-            let res = await fetch('http://localhost:5000/user/addFavorite',req);
-            let favorites =  this.state.favorites;
-            favorites.push(this.state.allData[dealerId][cycleStoreId][cycleId]);
-
-            let allData = this.state.allData;
-            allData[dealerId][cycleStoreId][cycleId].favorite = true;
-            
-            if(this.state.currentCycle.allData && cycleId === this.state.currentCycle.allData.cycleId){
-
-                let currentCycle = this.state.currentCycle;
-                currentCycle.allData.favorite = true;
-                this.setState({favorites:favorites,currentCycle:currentCycle,allData:allData});
-
-            }else{
-
-              this.setState({favorites:favorites,allData:allData});
-
-            }
-
-            
-
-            //Change color of star button from css
-
-        }catch(err){
-
-            console.log(err);
-            alert(err);
-
-        }
-
-    }
-
-
-
-    async deleteFavorite(dealerId, cycleStoreId, cycleId){
-
-        try{
-
-            // Request to deleteFavorite
-
-            const req = {
-                method : 'POST',
-                headers : {
-                    'authorization' : this.state.token, 
-                    'Content-Type': 'application/json',
-                },
-                body : JSON.stringify({
-                    userId:this.state.userId,
-                    dealerId: dealerId,
-                    cycleStoreId: cycleStoreId,
-                    cycleId: cycleId,
-                    token: this.state.token
-                })
-
-            };
-
-            const res = await fetch('http://localhost:5000/user/deleteFavorite',req);
-            const response  = await res.json();
-            // console.log("Delete response ",response);
-
-            let favorites =  this.state.favorites;
-            
-            for(let i =0;i<favorites.length;i++){
-
-              if(favorites[i].cycleId.toString() === cycleId)
-              {
-                  favorites.splice(i,1);
-                  break;
-              }
-
-            }
-
-            let allData = this.state.allData;
-            allData[dealerId][cycleStoreId][cycleId].favorite = false;
-            // console.log(allData);
-
-            if(this.state.currentCycle.allData && cycleId === this.state.currentCycle.allData.cycleId){
-
-              let currentCycle = this.state.currentCycle;
-              currentCycle.allData.favorite = false;
-              this.setState({favorites:favorites,currentCycle:currentCycle,allData:allData});
-
-            }else{
-
-              this.setState({favorites:favorites,allData:allData});
-
-            }
-
-            //Change color of star button from css.
-
-        }catch(err){
-
-            console.log(err);
-            alert(err);
-
-        }
-
-    }
+    
 
     changeShow(cycleStoreId){
 
@@ -351,8 +182,8 @@ class UserStore extends React.Component{
             // console.log(cycleStore);
             for(let i in this.state.cycleStore){
 
-                console.log("i = ",i);
-                jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={()=>{this.changeShow(i)}} addFavorite={this.addFavorite} deleteFavorite={this.deleteFavorite} bookCycle={this.bookCycle}/>)
+                
+                jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={()=>{this.changeShow(i)}} />)
     
             }
 
