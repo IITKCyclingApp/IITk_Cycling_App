@@ -11,7 +11,6 @@ class editCycle extends React.Component {
 
             dealerId: localStorage.getItem("dealerId"),
             token: localStorage.getItem("token"),
-            // cycleStoreId:"6244954717628323f150259d",
             cycleStoreId: localStorage.getItem("cycleStoreId"),
 
             newRate: "",
@@ -74,6 +73,7 @@ class editCycle extends React.Component {
     render() {
 
         if (!this.state.loggedIn) {
+            localStorage.clear();
             return (<Navigate to="/login" replace={true} />)
         }
 
@@ -102,7 +102,7 @@ class editCycle extends React.Component {
                                         <ul className="dropdown menu">
                                             <li><Link to="/dealer/home">Dashboard</Link></li>
                                             <li><Link to="/dealer/profile">My Profile</Link></li>
-                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{cursor:"pointer"}}>Logout</a></li>
+                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -177,7 +177,7 @@ class editCycle extends React.Component {
                                         <div className="col-md-6">
                                             <ul>
                                                 <li><Link to="/"><i className="fa fa-stop" />Home</Link></li>
-                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{cursor:"pointer"}}>Logout</a></p></li>
+                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></p></li>
                                             </ul>
                                         </div>
                                     </div>

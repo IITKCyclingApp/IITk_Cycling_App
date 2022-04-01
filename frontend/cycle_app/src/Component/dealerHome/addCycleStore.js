@@ -72,6 +72,7 @@ class addCycleStore extends React.Component {
 
     render() {
         if (!this.state.loggedIn) {
+            localStorage.clear();
             return (<Navigate to="/login" replace={true} />)
         }
 
@@ -100,7 +101,7 @@ class addCycleStore extends React.Component {
                                         <ul className="dropdown menu">
                                             <li><Link to="/dealer/home">Dashboard</Link></li>
                                             <li><Link to="/dealer/profile">My Profile</Link></li>
-                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{cursor:"pointer"}}>Logout</a></li>
+                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -174,7 +175,7 @@ class addCycleStore extends React.Component {
                                         <div className="col-md-6">
                                             <ul>
                                                 <li><Link to="/"><i className="fa fa-stop" />Home</Link></li>
-                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{cursor:"pointer"}}>Logout</a></p></li>
+                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></p></li>
                                             </ul>
                                         </div>
                                     </div>

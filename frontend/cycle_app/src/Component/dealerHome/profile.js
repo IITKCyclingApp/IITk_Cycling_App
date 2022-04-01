@@ -208,6 +208,7 @@ class dealerProfile extends React.Component {
         // this.getData();
         // setInterval(this.getData,2000);
         if (!this.state.loggedIn) {
+            localStorage.clear();
             return (<Navigate to="/login" replace={true} />)
         }
 
@@ -241,7 +242,7 @@ class dealerProfile extends React.Component {
 
                                 <br />
                                 <div class="text-button">
-                                    <a onClick={() => { this.confirmReturn(usedCycles[i].cycleStoreId, usedCycles[i].cycleId, usedCycles[i].userId) }} style={{cursor:"pointer"}}><strong>Confirm Return</strong></a>
+                                    <a onClick={() => { this.confirmReturn(usedCycles[i].cycleStoreId, usedCycles[i].cycleId, usedCycles[i].userId) }} style={{ cursor: "pointer" }}><strong>Confirm Return</strong></a>
                                 </div>
                             </div>
                         </div>
@@ -315,7 +316,7 @@ class dealerProfile extends React.Component {
                                         <ul className="dropdown menu">
                                             <li><Link to="/dealer/home">Dashboard</Link></li>
                                             <li><Link to="/dealer/profile">My Profile</Link></li>
-                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{cursor:"pointer"}}>Logout</a></li>
+                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -440,7 +441,7 @@ class dealerProfile extends React.Component {
                                         <div className="col-md-6">
                                             <ul>
                                                 <li><Link to="/"><i className="fa fa-stop" />Home</Link></li>
-                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{cursor:"pointer"}}>Logout</a></p></li>
+                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></p></li>
                                             </ul>
                                         </div>
                                     </div>
