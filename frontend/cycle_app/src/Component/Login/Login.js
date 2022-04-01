@@ -72,6 +72,7 @@ class Login extends React.Component {
 
     }
     console.log(this.state.userLogged)
+    
 
   }
   async registerUser() {
@@ -133,7 +134,7 @@ class Login extends React.Component {
 
     }
     console.log(this.state.userLogged)
-
+    window.location.reload(false);
   }
   async loginDealer() {
     const email = this.state.emailDealer;
@@ -245,6 +246,7 @@ class Login extends React.Component {
 
     }
     console.log(this.state.dealerLogged)
+    window.location.reload(false);
 
   }
 
@@ -260,16 +262,20 @@ class Login extends React.Component {
     return (
 
       <div>
-        {/* <h1>This is pure html</h1> */}
-        {/* navbar start */}
-        {/* navbar end */}
+        
+        <nav id="primary-nav" className="dropdown cf">
+          <ul className="dropdown menu">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/login">Login/Signup</Link></li>
+
+          </ul>
+        </nav>
         <div className="main">
           <section className="sign-in" id="Sign-in-User">
             <div className="container">
               <div className="signin-content">
                 <div className="signin-image">
-                  <figure><img src="https://source.unsplash.com/random/292x350/?computer" alt="sing up image" /></figure>
-                  <a href="#Sign-up" className="signup-image-link">Don't have an account?</a>
+                  <figure><img src="https://thumbs.dreamstime.com/b/login-icon-button-vector-illustration-isolated-white-background-127000574.jpg" alt="sing up image" /></figure>
                 </div>
                 <div className="signin-form">
                   <h2 className="form-title">Login User</h2>
@@ -361,8 +367,7 @@ class Login extends React.Component {
                   </form>
                 </div>
                 <div className="signup-image">
-                  <figure><img src="https://source.unsplash.com/random/292x350/?network" alt="sing up image" /></figure>
-                  <a href="#Sign-in" className="signup-image-link">Already a member?</a>
+                  <figure><img src="https://www.pngkit.com/png/full/334-3347027_register-icon-png-register-here-logo.png" alt="sing up image" /></figure>
                 </div>
               </div>
             </div>
@@ -373,8 +378,8 @@ class Login extends React.Component {
             <div className="container">
               <div className="signin-content">
                 <div className="signin-image">
-                  <figure><img src="https://source.unsplash.com/random/292x350/?computer" alt="sing up image" /></figure>
-                  <a href="#Sign-up" className="signup-image-link">Don't have an account?</a>
+                  <figure><img src="https://thumbs.dreamstime.com/b/login-icon-button-vector-illustration-isolated-white-background-127000574.jpg" alt="sing up image" /></figure>
+                  
                 </div>
                 <div className="signin-form">
                   <h2 className="form-title">Login Dealer</h2>
@@ -462,14 +467,61 @@ class Login extends React.Component {
                   </form>
                 </div>
                 <div className="signup-image">
-                  <figure><img src="https://source.unsplash.com/random/292x350/?network" alt="sing up image" /></figure>
-                  <a href="#Sign-in" className="signup-image-link">Already a member?</a>
+                  <figure><img src="https://www.pngkit.com/png/full/334-3347027_register-icon-png-register-here-logo.png" alt="sing up image" /></figure>
+                 
                 </div>
               </div>
             </div>
           </section>
         </div>
         {/* JS */}
+        <footer>
+          <div className="container">
+            <div className="row">
+              <div className="col-md-5">
+                <div className="about-veno">
+                  <div className="logo">
+                  </div>
+                  <p>IITK Cycling App</p>
+                  <ul className="social-icons">
+                    <li>
+                      <a href="#"><i className="fa fa-facebook" /></a>
+                      <a href="#"><i className="fa fa-twitter" /></a>
+                      <a href="#"><i className="fa fa-linkedin" /></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="useful-links">
+                  <div className="footer-heading">
+                    <h4>Rent Cycles</h4>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <ul>
+                        <li><Link to="/"><i className="fa fa-stop" />Home</Link></li>
+                        <li><Link to="/login"><i className="fa fa-stop" />Login/Signup</Link></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="contact-info">
+                  <div className="footer-heading">
+                    <h4>Contact Information</h4>
+                  </div>
+                  <p><i className="fa fa-map-marker" /> Hall 12, IITK</p>
+                  <ul>
+                    <li><span>Phone:</span><a href="#">9876543210</a></li>
+                    <li><span>Email:</span><a href="#">arpit@avi.com</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
         {/*  */}
       </div>
 

@@ -28,6 +28,7 @@ async function main() {
  
 */
 async function dealerProfile(req, res) {
+  console.log("request to dealer Profile");
   const data = req.body;
   const dealer=await dealerModel.findOne({ dealerId: data.dealerId });
   res.status(200).json({ 'name':dealer.name,'address':dealer.address,'contact':dealer.contact[0],'email':dealer.email });

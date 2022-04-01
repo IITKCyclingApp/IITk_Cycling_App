@@ -154,12 +154,12 @@ class dealerProfile extends React.Component {
 
 
     }
-    async confirmReturn(cycleStoreId,cycleId,userId) {
+    async confirmReturn(cycleStoreId, cycleId, userId) {
         const dealerId = localStorage.getItem("dealerId");
         const token = localStorage.getItem("token");
 
         this.setState({ dealerId: dealerId, token: token });
-       
+
         try {
 
             // Request to cancelBooking
@@ -172,9 +172,9 @@ class dealerProfile extends React.Component {
                 },
                 body: JSON.stringify({
                     dealerId: dealerId,
-                    cycleStoreId:cycleStoreId,
-                    cycleId:cycleId,
-                    userId:userId
+                    cycleStoreId: cycleStoreId,
+                    cycleId: cycleId,
+                    userId: userId
                 })
 
             };
@@ -208,9 +208,10 @@ class dealerProfile extends React.Component {
         // this.getData();
         // setInterval(this.getData,2000);
         if (!this.state.loggedIn) {
+            localStorage.clear();
             return (<Navigate to="/login" replace={true} />)
         }
-        
+
 
         let jsx = [];
         let usedCycles = this.state.usedCycles;
@@ -222,30 +223,30 @@ class dealerProfile extends React.Component {
             for (let i in usedCycles) {
 
                 console.log(usedCycles[i]);
-                
+
                 // jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={() => { this.changeShow(i) }} addFavorite={this.addFavorite} deleteCycle={this.deleteCycle} editCycle={this.editCycle} />)
                 jsx.push(
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="featured-item">
-                        <div class="thumb">
-                            <div class="thumb-img">
-                                <img src="https://www.herocycles.com/admin/public/uploads/bestseller/60223dea3576c5m0f8TdEWI.png" alt="" />
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="featured-item">
+                            <div class="thumb">
+                                <div class="thumb-img">
+                                    <img src="https://www.herocycles.com/admin/public/uploads/bestseller/60223dea3576c5m0f8TdEWI.png" alt="" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="down-content">
+                            <div class="down-content">
 
-                            <h4 id="cycleName">User Name :{usedCycles[i].userName}</h4>
-                            <h4 id="cycleName">Cycle Name :{usedCycles[i].cycleId}</h4>
-                            <h4 id="cycleRate">Cycle Rate : {usedCycles[i].rate} </h4>
-                            <h4 id="cycleRate">Start Time : {new Date(usedCycles[i].timeStart).toLocaleString()}  </h4>
-                            
-                            <br />
-                            <div class="text-button">
-                                <a  onClick={()=>{this.confirmReturn(usedCycles[i].cycleStoreId,usedCycles[i].cycleId,usedCycles[i].userId)}}><strong>Confirm Return</strong></a>
+                                <h4 id="cycleName">User Name :{usedCycles[i].userName}</h4>
+                                <h4 id="cycleName">Cycle Name :{usedCycles[i].cycleName}</h4>
+                                <h4 id="cycleRate">Cycle Rate : {usedCycles[i].rate} </h4>
+                                <h4 id="cycleRate">Start Time : {new Date(usedCycles[i].timeStart).toLocaleString()}  </h4>
+
+                                <br />
+                                <div class="text-button">
+                                    <a onClick={() => { this.confirmReturn(usedCycles[i].cycleStoreId, usedCycles[i].cycleId, usedCycles[i].userId) }} style={{ cursor: "pointer" }}><strong>Confirm Return</strong></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>)
+                    </div>)
             }
 
         }
@@ -261,29 +262,29 @@ class dealerProfile extends React.Component {
             // console.log(cycleStore);
             for (let i in bookedCycles) {
 
-                let t=bookedCycles[i].timeStart.toLocaleString();
+                let t = bookedCycles[i].timeStart.toLocaleString();
                 console.log(t);
-                
+
                 // jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={() => { this.changeShow(i) }} addFavorite={this.addFavorite} deleteCycle={this.deleteCycle} editCycle={this.editCycle} />)
                 jsx1.push(
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="featured-item">
-                        <div class="thumb">
-                            <div class="thumb-img">
-                                <img src="https://www.herocycles.com/admin/public/uploads/bestseller/60223dea3576c5m0f8TdEWI.png" alt="" />
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="featured-item">
+                            <div class="thumb">
+                                <div class="thumb-img">
+                                    <img src="https://www.herocycles.com/admin/public/uploads/bestseller/60223dea3576c5m0f8TdEWI.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="down-content">
+                                <h4 id="cycleName">User Name :{bookedCycles[i].userName}</h4>
+                                <h4 id="cycleName">Cycle Name :{bookedCycles[i].cycleName}</h4>
+                                <h4 id="cycleRate">Cycle Rate : {bookedCycles[i].rate} </h4>
+                                <h4 id="cycleRate">Start Time : {new Date(bookedCycles[i].timeStart).toLocaleString()}  </h4>
+
+                                <br />
+
                             </div>
                         </div>
-                        <div class="down-content">
-                        <h4 id="cycleName">User Name :{usedCycles[i].userName}</h4>
-                            <h4 id="cycleName">Cycle Name :{bookedCycles[i].cycleId}</h4>
-                            <h4 id="cycleRate">Cycle Rate : {bookedCycles[i].rate} </h4>
-                            <h4 id="cycleRate">Start Time : {new Date(bookedCycles[i].timeStart).toLocaleString()}  </h4>
-                            
-                            <br />
-                            
-                        </div>
-                    </div>
-                </div>)
+                    </div>)
             }
 
         }
@@ -310,15 +311,14 @@ class dealerProfile extends React.Component {
                             <div className="row">
                                 <div className="col-md-12">
                                     <button id="primary-nav-button" type="button">Menu</button>
-                                    <Link to="/"><div className="logo">
-                                        <img src="logo link" alt="IITK-cycling app" />
-                                    </div></Link>
+
                                     <nav id="primary-nav" className="dropdown cf">
                                         <ul className="dropdown menu">
-                                            <li><Link to="/dealer/home">Home</Link></li>
+                                            <li><Link to="/dealer/home">Dashboard</Link></li>
                                             <li><Link to="/dealer/profile">My Profile</Link></li>
+                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></li>
                                         </ul>
-                                    </nav>{/* / #primary-nav */}
+                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -333,10 +333,6 @@ class dealerProfile extends React.Component {
                             <div className="banner-caption">
                                 <div className="line-dec" />
                                 <h2 style={{ "color": "White", "text-shadow": "2px 2px black" }}>Welcome.</h2>
-                                {/* <div className="blue-button">
-                                    <Link to="/dealer/home" style={{"z-index":100}}>Home</Link>
-                                    <a href="/">sme</a>
-                                </div> */}
                                 <div className="line-dec" />
                             </div>
                         </div>
@@ -355,15 +351,15 @@ class dealerProfile extends React.Component {
                             <div class="row">
                                 <div class="col-md-7">
                                     <div class="left-content">
-                                        <h2 id="username" >{this.state.name}</h2>
+                                        <h3  > <b>Name</b> : {this.state.name}</h3>
                                         <h3>
-                                            {this.state.contact}
+                                            <b>Contact</b> : {this.state.contact}
                                         </h3>
                                         <h3>
-                                            {this.state.email}
+                                            <b>Email</b> : {this.state.email}
                                         </h3>
                                         <h3>
-                                            {this.state.address}
+                                            <b>Address</b> : {this.state.address}
                                         </h3>
                                     </div>
                                 </div>
@@ -401,7 +397,7 @@ class dealerProfile extends React.Component {
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="section-heading">
-                                        <span><h1>currentBookedCycle Cycles</h1></span>
+                                        <span><h1> Booked Cycles</h1></span>
                                         <h2 id="store-name">These are the cycles booked by the users.</h2>
                                         <hr />
                                     </div>
@@ -415,8 +411,9 @@ class dealerProfile extends React.Component {
                         </div>
                     </section>
                     {/* <Link to={"/addCycleStore"}><button type="button" class="btn btn-outline-primary">Add Cycle Store</button></Link> */}
-                    
+
                 </main>
+                {/* Footer start */}
                 {/* Footer start */}
                 <footer>
                     <div className="container">
@@ -424,9 +421,8 @@ class dealerProfile extends React.Component {
                             <div className="col-md-5">
                                 <div className="about-veno">
                                     <div className="logo">
-                                        <img src="img/footer_logo.png" alt="Venue Logo" />
                                     </div>
-                                    <p>Text about us</p>
+                                    <p>IITK Cycling App</p>
                                     <ul className="social-icons">
                                         <li>
                                             <a href="#"><i className="fa fa-facebook" /></a>
@@ -439,14 +435,13 @@ class dealerProfile extends React.Component {
                             <div className="col-md-4">
                                 <div className="useful-links">
                                     <div className="footer-heading">
-                                        <h4>what we have to offer for you?</h4>
+                                        <h4>Rent Cycles</h4>
                                     </div>
                                     <div className="row">
                                         <div className="col-md-6">
                                             <ul>
                                                 <li><Link to="/"><i className="fa fa-stop" />Home</Link></li>
-                                                <li><Link to="/store"><i className="fa fa-stop" />Store</Link></li>
-                                                <li><Link to="/profile"><i className="fa fa-stop" />Profile</Link></li>
+                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></p></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -457,10 +452,10 @@ class dealerProfile extends React.Component {
                                     <div className="footer-heading">
                                         <h4>Contact Information</h4>
                                     </div>
-                                    <p><i className="fa fa-map-marker" /> 212 Barrington Court New York, ABC</p>
+                                    <p><i className="fa fa-map-marker" /> Hall 12, IITK</p>
                                     <ul>
-                                        <li><span>Phone:</span><a href="#">+1 333 4040 5566</a></li>
-                                        <li><span>Email:</span><a href="#">contact@company.com</a></li>
+                                        <li><span>Phone:</span><a href="#">9876543210</a></li>
+                                        <li><span>Email:</span><a href="#">arpit@avi.com</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -470,7 +465,7 @@ class dealerProfile extends React.Component {
                 {/* Footer end */}
                 {/* Sub footer start */}
                 <div className="sub-footer">
-                    <p>Copyright © 2021 IITK-Cycling App <Link to="/">Our Link</Link></p>
+                    <p>Copyright © 2021 IITK-Cycling App</p>
                 </div>
                 {/* Sub footer end */}
             </div>

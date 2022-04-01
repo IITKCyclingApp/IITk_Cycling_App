@@ -15,11 +15,11 @@ class dealerHome extends React.Component {
             dealerId: localStorage.getItem("dealerId"),
             token: localStorage.getItem("token"),
             bookedCycles: [],
-            usedCycles:[],
+            usedCycles: [],
             loggedIn: 1
         }
         this.getData = this.getData.bind(this);
-        
+        this.deleteCycle=this.deleteCycle.bind(this);
     }
 
     componentDidMount() {
@@ -68,10 +68,7 @@ class dealerHome extends React.Component {
 
             console.log(err);
             this.setState({ loggedIn: 0 });
-            // alert(err);
-
         }
-
 
     }
     changeShow(cycleStoreId) {
@@ -106,7 +103,6 @@ class dealerHome extends React.Component {
             const response = await res.json();
 
             if (res.status === 200) {
-                alert("Cycle deleted Successfully")
                 this.getData();
             }
             else {
@@ -120,9 +116,6 @@ class dealerHome extends React.Component {
 
             console.log(err);
             this.setState({ loggedIn: 0 })
-
-            // alert(err);
-
         }
 
     }
@@ -134,11 +127,9 @@ class dealerHome extends React.Component {
 
     }
     render() {
-        // this.getData();
-        // setInterval(this.getData,2000);
+        
         if (!this.state.loggedIn) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("dealerId");
+            localStorage.clear();
             return (<Navigate to="/login" replace={true} />)
         }
 
@@ -152,14 +143,11 @@ class dealerHome extends React.Component {
             // console.log(cycleStore);
             for (let i in this.state.stores) {
 
-                console.log("i = ", i);
                 jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={() => { this.changeShow(i) }} addFavorite={this.addFavorite} deleteCycle={this.deleteCycle} editCycle={this.editCycle} />)
 
             }
 
         }
-        console.log(jsx);
-
         return (
             <div>
                 <meta charSet="utf-8" />
@@ -181,15 +169,14 @@ class dealerHome extends React.Component {
                             <div className="row">
                                 <div className="col-md-12">
                                     <button id="primary-nav-button" type="button">Menu</button>
-                                    <Link to="/"><div className="logo">
-                                        <img src="logo link" alt="IITK-cycling app" />
-                                    </div></Link>
+                                    
                                     <nav id="primary-nav" className="dropdown cf">
                                         <ul className="dropdown menu">
-                                            <li><Link to="/dealer/home">Home</Link></li>
+                                            <li><Link to="/dealer/home">Dashboard</Link></li>
                                             <li><Link to="/dealer/profile">My Profile</Link></li>
+                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{cursor:"pointer"}}>Logout</a></li>
                                         </ul>
-                                    </nav>{/* / #primary-nav */}
+                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -198,40 +185,28 @@ class dealerHome extends React.Component {
                 {/* Navbar end */}
                 {/* Banner start */}
                 <section className="banner" id="top" style={{ "background-image": "url(https://source.unsplash.com/random/1920×700/?cycle)" }}>
-                    {/* <div className="container" > */}
                     <div className="row">
                         <div className="col-md-10 col-md-offset-1">
                             <div className="banner-caption">
                                 <div className="line-dec" />
-                                <h2 style={{ "color": "White" ,"text-shadow":"2px 2px black" }}>Welcome.</h2>
-                                {/* <div className="blue-button">
-                                    <Link to="/dealer/profile">Profile</Link>
-                                </div> */}
+                                <h2 style={{ "color": "White", "text-shadow": "2px 2px black" }}>Welcome.</h2>
                                 <div className="line-dec" />
                             </div>
                         </div>
-                        {/* </div> */}
                     </div>
                 </section>
                 {/* Banner end */}
 
 
-                {/* -------------------------------------------- */}
-
-
                 <main>
-                    {/* Store section */}
-                    {/* {currStatus} */}
-                    {/* Store section */}
-
-                    {/* Store section */}
+                    
                     {jsx}
-                    {/* <Link to={"/addCycleStore"}><button type="button" class="btn btn-outline-primary">Add Cycle Store</button></Link> */}
+                   
                     <section className="featured-places" >
                         <Link to="/addCycleStore"><div className="container">
                             <div className="row">
                                 <center>
-                                    <input type="button" defaultValue="Add Cyle Store" style={{ "text-shadow": "2px 2px grey", "height": "105px", "font-size": "25px", "background-image": "url('https://source.unsplash.com/random/720×480/?pink')", "color": "white" }} />
+                                    <input type="button" defaultValue="Add Cyle Store" style={{ "text-shadow": "2px 2px grey", "height": "105px", "font-size": "25px", "background-color": "gray","border-radius":"25px","border":"2px solid black", "color": "white" }} />
                                     <br /><br /><hr /><br />
 
                                 </center>
@@ -246,9 +221,8 @@ class dealerHome extends React.Component {
                             <div className="col-md-5">
                                 <div className="about-veno">
                                     <div className="logo">
-                                        <img src="img/footer_logo.png" alt="Venue Logo" />
                                     </div>
-                                    <p>Text about us</p>
+                                    <p>IITK Cycling App</p>
                                     <ul className="social-icons">
                                         <li>
                                             <a href="#"><i className="fa fa-facebook" /></a>
@@ -261,14 +235,13 @@ class dealerHome extends React.Component {
                             <div className="col-md-4">
                                 <div className="useful-links">
                                     <div className="footer-heading">
-                                        <h4>what we have to offer for you?</h4>
+                                        <h4>Rent Cycles</h4>
                                     </div>
                                     <div className="row">
                                         <div className="col-md-6">
                                             <ul>
                                                 <li><Link to="/"><i className="fa fa-stop" />Home</Link></li>
-                                                <li><Link to="/store"><i className="fa fa-stop" />Store</Link></li>
-                                                <li><Link to="/profile"><i className="fa fa-stop" />Profile</Link></li>
+                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{cursor:"pointer"}}>Logout</a></p></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -279,10 +252,10 @@ class dealerHome extends React.Component {
                                     <div className="footer-heading">
                                         <h4>Contact Information</h4>
                                     </div>
-                                    <p><i className="fa fa-map-marker" /> 212 Barrington Court New York, ABC</p>
+                                    <p><i className="fa fa-map-marker" /> Hall 12, IITK</p>
                                     <ul>
-                                        <li><span>Phone:</span><a href="#">+1 333 4040 5566</a></li>
-                                        <li><span>Email:</span><a href="#">contact@company.com</a></li>
+                                        <li><span>Phone:</span><a href="#">9876543210</a></li>
+                                        <li><span>Email:</span><a href="#">arpit@avi.com</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -292,9 +265,10 @@ class dealerHome extends React.Component {
                 {/* Footer end */}
                 {/* Sub footer start */}
                 <div className="sub-footer">
-                    <p>Copyright © 2021 IITK-Cycling App <Link to="/">Our Link</Link></p>
+                    <p>Copyright © 2021 IITK-Cycling App</p>
                 </div>
                 {/* Sub footer end */}
+
             </div>
 
         )

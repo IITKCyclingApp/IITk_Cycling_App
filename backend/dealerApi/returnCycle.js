@@ -29,10 +29,8 @@ async function returnCycle(req, res) {
     console.log("request to return cycle");
     console.log(data);
     const time =new Date();
-    await statusModel.updateOne({ cycleId:data.cycleId,userId:data.userId }, { status : 2,timeEnd:time})
-    // cycleId: data.cycleId,userId: data.userId 
+    await statusModel.updateOne({ cycleId:data.cycleId,userId:data.userId }, { status : 3,timeEnd:time})
     const data1 = await statusModel.findOne({userId:data.userId,cycleId:data.cycleId});
-    // console.log(data1.userId);
     
     const rate = data1.rate;
     let cost = rate * (data1.timeEnd - data1.timeStart)/(1000*60*60);
