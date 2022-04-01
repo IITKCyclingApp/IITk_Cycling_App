@@ -9,9 +9,9 @@ class CycleStore extends React.Component{
         super(props);
         this.state = {
   
-          userId:localStorage.getItem("userId"),
-              token:`Bearer ${localStorage.getItem("token")}`,
-  
+                userId:localStorage.getItem("userId"),
+                token:`Bearer ${localStorage.getItem("token")}`,
+                allData : this.props.allData,
         }
   
       }
@@ -45,13 +45,18 @@ class CycleStore extends React.Component{
   
             const res = await fetch('http://localhost:5000/user/bookCycle',req);
             const response  = await res.json();
-  
-             if(res.status===400){
+
+            let allData = this.state.allData;
+            if(res.status===200){
+                allData.cycles[cycleId].availableCycle -=1;
+                this.setState({allData:allData});
+            }
+             else if(res.status===400){
   
                 alert(response.msg);
   
             }else{
-  
+                
                 this.setState({toLogin:true});
   
             }
@@ -92,23 +97,12 @@ class CycleStore extends React.Component{
             };
   
             let res = await fetch('http://localhost:5000/user/addFavorite',req);
-            let favorites =  this.state.favorites;
-            favorites.push(this.state.allData[dealerId][cycleStoreId][cycleId]);
+            
   
             let allData = this.state.allData;
-            allData[dealerId][cycleStoreId][cycleId].favorite = true;
+            allData.cycles[cycleId].favorite = true;
             
-            if(this.state.currentCycle.allData && cycleId === this.state.currentCycle.allData.cycleId){
-  
-                let currentCycle = this.state.currentCycle;
-                currentCycle.allData.favorite = true;
-                this.setState({favorites:favorites,currentCycle:currentCycle,allData:allData});
-  
-            }else{
-  
-              this.setState({favorites:favorites,allData:allData});
-  
-            }
+            this.setState({allData:allData});
   
             
   
@@ -151,33 +145,10 @@ class CycleStore extends React.Component{
             const response  = await res.json();
             // console.log("Delete response ",response);
   
-            let favorites =  this.state.favorites;
-            
-            for(let i =0;i<favorites.length;i++){
-  
-              if(favorites[i].cycleId.toString() === cycleId)
-              {
-                  favorites.splice(i,1);
-                  break;
-              }
-  
-            }
-  
             let allData = this.state.allData;
-            allData[dealerId][cycleStoreId][cycleId].favorite = false;
-            // console.log(allData);
-  
-            if(this.state.currentCycle.allData && cycleId === this.state.currentCycle.allData.cycleId){
-  
-              let currentCycle = this.state.currentCycle;
-              currentCycle.allData.favorite = false;
-              this.setState({favorites:favorites,currentCycle:currentCycle,allData:allData});
-  
-            }else{
-  
-              this.setState({favorites:favorites,allData:allData});
-  
-            }
+            allData.cycles[cycleId].favorite = false;
+            
+            this.setState({allData:allData});
   
             //Change color of star button from css.
   
@@ -195,7 +166,7 @@ class CycleStore extends React.Component{
 
         let cycles = [];
 
-        let allData = this.props.allData;
+        let allData = this.state.allData;
 
         if(allData.show){
 

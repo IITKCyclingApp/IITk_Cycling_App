@@ -10,6 +10,7 @@ import AddCycleStore from './Component/dealerHome/addCycleStore'
 import AddCycle from './Component/dealerHome/addCycle'
 import EditCycle from './Component/dealerHome/editCycle'
 import DealerProfile from './Component/dealerHome/profile'
+import UserProfile from './Component/UserHome/UserProfile';
 // import UserProfile from './Component/UserProfile/UserProfile';
 // import LoginPage from './pages/login'
 // import RegisterPage from './pages/register'
@@ -27,6 +28,7 @@ export default function App() {
                     <Route path="/login" element={ <Login /> } />
                     <Route path="/user/home" element={ <UserHome /> } />
                     <Route path="/user/store" element={<UserStore/>}/>
+                    <Route path="/user/profile" element={<UserProfile/>}/>
                     <Route path="/dealer/home" element={<DealerHome/>}/>
                     <Route path="/addCycleStore" element={<AddCycleStore/>}/>
                     <Route path="/addCycle" element={<AddCycle/>}/>

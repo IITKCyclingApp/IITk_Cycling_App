@@ -63,8 +63,9 @@ class UserHome extends React.Component{
                   let time = new Date();
                   let trans = this.state.currentCycle.transaction;
                   if(trans.status == 1){
-
-                    if(time-trans.timeStart>7200000){
+                    
+                    let time_initial = Date.parse(trans.timeStart);
+                    if(time-time_initial>3600000){
   
                       this.cancelBooking(trans.dealerId,trans.cycleStoreId,trans.cycleId);
   
@@ -73,6 +74,8 @@ class UserHome extends React.Component{
                   }
                 },300000);
 
+
+
                 setInterval(()=>{
 
                   let time = new Date();
@@ -80,12 +83,13 @@ class UserHome extends React.Component{
                   let currentCycle = this.state.currentCycle;
                   if(trans.status == 2){
 
-                    let time_diff = (time - trans.timeStart)/3600000;
-                    currentCycle.transaction.cost = time_diff * trans.rate;
+                    let time_initial = Date.parse(trans.timeStart);
+                    let time_diff = (time - time_initial)/3600000;
+                    currentCycle.transaction.cost = (time_diff * trans.rate).toFixed(1);
                     this.setState({currentCycle:currentCycle});                
 
 
-                }},300000);
+                }},30000);
 
 
 
@@ -111,6 +115,17 @@ class UserHome extends React.Component{
                     // console.log("response2 ",response2);
                     if(response.allData){     // allData stores all data about current booked cycle. temp stores all data of all cycles
                         this.setState({currentCycle : {transaction:response.transaction,allData:response.allData},allData:response.temp,favorites:response2.data});
+
+                        let time = new Date();
+                        let trans = this.state.currentCycle.transaction;
+                        let currentCycle = this.state.currentCycle;
+                        if(trans.status == 2){
+
+                        let time_initial = Date.parse(trans.timeStart);
+                        let time_diff = (time - time_initial)/3600000;
+                        currentCycle.transaction.cost = (time_diff * trans.rate).toFixed(1);
+                        this.setState({currentCycle:currentCycle});   
+                        }
 
                     }else{
                         this.setState({currentCycle : {transaction:{status:0}},allData:response.temp,favorites:response2.data});
@@ -544,6 +559,7 @@ class UserHome extends React.Component{
                           <h4 id="cycleRate">Cycle Rate : {this.state.currentCycle.allData?this.state.currentCycle.allData.cycleRate:""}</h4>
                           <h4 id="dealerNumber">Dealer Contact Number : {this.state.currentCycle.allData?this.state.currentCycle.allData.dealerContact[0]:""}</h4>
                           <h4 id="bookingTime">Booking Time : {this.state.currentCycle.transaction?new Date(this.state.currentCycle.transaction.timeStart).toLocaleString():""}</h4>
+                          <h4 id="bookingTime">Pick Up address : {this.state.currentCycle.allData?this.state.currentCycle.allData.cycleStoreAddress:""}</h4>
                           <br />
                           <div className="text-button">
                             <a onClick={()=>this.confirmBooking()} style={{cursor:"pointer"}}><strong>Confirm Booking</strong></a>
@@ -599,7 +615,7 @@ class UserHome extends React.Component{
                           <h4 id="cycleRate">Cycle Rate : {this.state.currentCycle.allData?this.state.currentCycle.allData.cycleRate:""}</h4>
                           <h4 id="dealerNumber">Dealer Contact Number : {this.state.currentCycle.allData?this.state.currentCycle.allData.dealerContact[0]:""}</h4>
                           <h4 id="bookingTime">Start Time : {this.state.currentCycle.transaction?new Date(this.state.currentCycle.transaction.timeStart).toLocaleString():""}</h4>
-                          <h4 id="bookingTime">Cost : {this.state.currentCycle.transaction?this.state.currentCycle.transaction.cost:""}</h4>
+                          <h4 id="bookingTime">Cost : Rs. {this.state.currentCycle.transaction?this.state.currentCycle.transaction.cost:""}</h4>
                           <br />
                           {/* <div className="text-button">
                             <a onClick={()=>this.confirmBooking()} style={{cursor:"pointer"}}><strong>Confirm Booking</strong></a>

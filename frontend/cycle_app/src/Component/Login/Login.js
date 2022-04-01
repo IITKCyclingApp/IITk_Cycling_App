@@ -79,7 +79,7 @@ class Login extends React.Component {
     const pass = this.state.passwordUserRegister;
     const name = this.state.nameUser;
     const roll = this.state.rollUser;
-    const address = this.state.contactUser;
+    const address = this.state.addressUser;
     const contact = this.state.contactUser;
     const confirmPassword = this.state.confirmPasswordUser;
 
@@ -193,7 +193,7 @@ class Login extends React.Component {
     const pass = this.state.passwordDealerRegister;
     const name = this.state.nameDealer;
 
-    const address = this.state.contactDealer;
+    const address = this.state.addressDealer;
     const contact = this.state.contactDealer;
     const confirmPassword = this.state.confirmPasswordDealer;
 

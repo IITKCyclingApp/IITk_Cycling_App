@@ -16,7 +16,7 @@ async function main() {
 async function viewProfileUser(req,res){
 
     const userData = await userModel.findOne({userId: req.body.userId});
-
+    console.log(userData);
     return res.status(200).json(userData);
 
 }
