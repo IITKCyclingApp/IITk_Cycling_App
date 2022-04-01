@@ -14,7 +14,6 @@ import viewCycleStore from './userApi/viewCycleStore.js';
 import viewFavoriteCycle from './userApi/viewFavorites.js';
 import viewProfileUser from './userApi/viewProfile.js';
 import currentStatusUser from './userApi/currentStatus.js';
-
 //dealer
 import addCycleStore from './dealerApi/addCycleStore.js'
 import deleteCycleStore from './dealerApi/deleteCycleStore.js'
@@ -25,6 +24,7 @@ import updateCycle from './dealerApi/updateCycle.js';
 import returnCycle from './dealerApi/returnCycle.js';
 import dealerProfile from './dealerApi/dealerProfile.js'
 import currentRentCycle from './dealerApi/currentRentcycle.js';
+import currentBookedCycle from './dealerApi/bookedCycles.js';
 //auth
 import registerUser from './auth/registerUser.js';
 import registerDealer from './auth/registerDealer.js';
@@ -65,7 +65,8 @@ app.post('/editCycle', updateCycle);
 app.post('/returnCycle', returnCycle);
 app.post('/dealerProfile',dealerProfile);
 app.post('/rentCycles',currentRentCycle);
-
+app.post('/bookedCycles',currentBookedCycle);
+app.post('/getUserName',getuserName);
 // app.use(express)
 
 const port = 5000;

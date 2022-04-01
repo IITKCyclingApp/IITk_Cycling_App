@@ -33,12 +33,22 @@ async function verify(req, res, next) {
         if (req.body.userId) {
 
             if (payload.userId != req.body.userId) {
-                return res.status(401).json({ "auth": false, "msg": "Status unauthorised user." });
+                if (req.body.dealerId) {
+            
+                    if (payload.dealerId != req.body.dealerId) {
+                        return res.status(401).json({ "auth": false, "msg": "Status unauthorised dealer." });
+                    }
+                }
+                else{
+
+                    return res.status(401).json({ "auth": false, "msg": "Status unauthorised user." });
+                }
             }
         }
         else if (req.body.dealerId) {
             
             if (payload.dealerId != req.body.dealerId) {
+                
                 return res.status(401).json({ "auth": false, "msg": "Status unauthorised dealer." });
             }
         }

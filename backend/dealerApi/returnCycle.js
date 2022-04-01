@@ -28,15 +28,16 @@ async function returnCycle(req, res) {
     const data = req.body;
     console.log("request to return cycle");
     console.log(data);
-    await statusModel.updateOne({ rate:10 }, { status : 3});
-    const ak = await statusModel.findOne({userId : "6232f3f158e542ccd32154f1"});
-    console.log(ak);
+    const time =new Date();
+    await statusModel.updateOne({ cycleId:data.cycleId,userId:data.userId }, { status : 2,timeEnd:time})
+    // cycleId: data.cycleId,userId: data.userId 
+    const data1 = await statusModel.findOne({userId:data.userId,cycleId:data.cycleId});
+    // console.log(data1.userId);
     
-    // const data1 = await statusModel.find({ dealerId: data.dealerId, cycleId: data.cycleId, cycleStoreId: data.cycleStoreId, userId: data.userId });
-    // const rate = data1.rate;
-    // console.log(data1);
-    // let cost = rate * (data1.timeEnd - data1.timeStart);
-    res.status(200).json({ 'cost': 1 });
+    const rate = data1.rate;
+    let cost = rate * (data1.timeEnd - data1.timeStart)/(1000*60*60);
+    cost =parseInt(cost);
+    res.status(200).json({ 'cost': cost });
 }
 export default returnCycle;
 //not working some kind of bug

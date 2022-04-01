@@ -14,8 +14,8 @@ class dealerProfile extends React.Component {
         this.state = {
             dealerId: localStorage.getItem("dealerId"),
             token: localStorage.getItem("token"),
-            usedCycles:[],
-            bookedCycles:[],
+            usedCycles: [],
+            bookedCycles: [],
             loggedIn: 1,
             name: '',
             email: '',
@@ -60,10 +60,10 @@ class dealerProfile extends React.Component {
             console.log(response);
             if (res.status === 200) {
                 console.log("Profile info success ");
-                this.setState({name:response.name});
-                this.setState({email:response.email});
-                this.setState({contact:response.contact});
-                this.setState({address:response.address});
+                this.setState({ name: response.name });
+                this.setState({ email: response.email });
+                this.setState({ contact: response.contact });
+                this.setState({ address: response.address });
             }
             else {
                 console.log(response.msg);
@@ -77,9 +77,9 @@ class dealerProfile extends React.Component {
             // alert(err);
 
         }
+        //used cycles
         try {
 
-            // Request to cancelBooking
 
             const req = {
                 method: 'POST',
@@ -99,8 +99,45 @@ class dealerProfile extends React.Component {
             console.log(response);
             if (res.status === 200) {
                 console.log("Used Cycles success ");
-                this.setState({usedCycles:response});
-                
+                this.setState({ usedCycles: response });
+
+            }
+            else {
+                console.log(response.msg);
+                // this.setState({ loggedIn: 0 });
+            }
+
+        } catch (err) {
+
+            console.log(err);
+            // this.setState({ loggedIn: 0 });
+            // alert(err);
+
+        }
+
+        try {
+
+
+            const req = {
+                method: 'POST',
+                headers: {
+                    'authorization': `Bearer ${this.state.token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    dealerId: dealerId
+
+                })
+
+            };
+
+            const res = await fetch('http://localhost:5000/bookedCycles', req);
+            const response = await res.json();
+            console.log(response);
+            if (res.status === 200) {
+                console.log("booked Cycles success ");
+                this.setState({ bookedCycles: response });
+
             }
             else {
                 console.log(response.msg);
@@ -117,32 +154,140 @@ class dealerProfile extends React.Component {
 
 
     }
-   
-    
+    async confirmReturn(cycleStoreId,cycleId,userId) {
+        const dealerId = localStorage.getItem("dealerId");
+        const token = localStorage.getItem("token");
+
+        this.setState({ dealerId: dealerId, token: token });
+       
+        try {
+
+            // Request to cancelBooking
+
+            const req = {
+                method: 'POST',
+                headers: {
+                    'authorization': `Bearer ${this.state.token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    dealerId: dealerId,
+                    cycleStoreId:cycleStoreId,
+                    cycleId:cycleId,
+                    userId:userId
+                })
+
+            };
+            console.log(req);
+            const res = await fetch('http://localhost:5000/returnCycle', req);
+            const response = await res.json();
+            console.log(response);
+            if (res.status === 200) {
+                console.log("Return confirmed ");
+                // console.log(response.cost);
+                alert(`Total Fare is: ${response.cost} Rupees`);
+            }
+            else {
+                console.log(response.msg);
+                // this.setState({ loggedIn: 0 });
+            }
+
+        } catch (err) {
+
+            console.log(err);
+            // this.setState({ loggedIn: 0 });
+            // alert(err);
+
+        }
+        window.location.reload(false);
+
+    }
+
+
     render() {
         // this.getData();
         // setInterval(this.getData,2000);
         if (!this.state.loggedIn) {
             return (<Navigate to="/login" replace={true} />)
         }
-
+        
 
         let jsx = [];
-        let cycleStore = this.state.stores;
+        let usedCycles = this.state.usedCycles;
         jsx.push(<div class="my-10"></div>)
-
-        if (cycleStore) {
+        console.log(usedCycles)
+        if (usedCycles) {
 
             // console.log(cycleStore);
-            for (let i in this.state.stores) {
+            for (let i in usedCycles) {
 
-                console.log("i = ", i);
-                jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={() => { this.changeShow(i) }} addFavorite={this.addFavorite} deleteCycle={this.deleteCycle} editCycle={this.editCycle} />)
+                console.log(usedCycles[i]);
+                
+                // jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={() => { this.changeShow(i) }} addFavorite={this.addFavorite} deleteCycle={this.deleteCycle} editCycle={this.editCycle} />)
+                jsx.push(
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="featured-item">
+                        <div class="thumb">
+                            <div class="thumb-img">
+                                <img src="https://www.herocycles.com/admin/public/uploads/bestseller/60223dea3576c5m0f8TdEWI.png" alt="" />
+                            </div>
+                        </div>
+                        <div class="down-content">
 
+                            <h4 id="cycleName">User Name :{usedCycles[i].userName}</h4>
+                            <h4 id="cycleName">Cycle Name :{usedCycles[i].cycleId}</h4>
+                            <h4 id="cycleRate">Cycle Rate : {usedCycles[i].rate} </h4>
+                            <h4 id="cycleRate">Start Time : {new Date(usedCycles[i].timeStart).toLocaleString()}  </h4>
+                            
+                            <br />
+                            <div class="text-button">
+                                <a  onClick={()=>{this.confirmReturn(usedCycles[i].cycleStoreId,usedCycles[i].cycleId,usedCycles[i].userId)}}><strong>Confirm Return</strong></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>)
             }
 
         }
         console.log(jsx);
+
+        //booked cycles
+        let jsx1 = [];
+        let bookedCycles = this.state.bookedCycles;
+        jsx1.push(<div class="my-10"></div>)
+        console.log(bookedCycles)
+        if (bookedCycles) {
+
+            // console.log(cycleStore);
+            for (let i in bookedCycles) {
+
+                let t=bookedCycles[i].timeStart.toLocaleString();
+                console.log(t);
+                
+                // jsx.push(<CycleStore token={this.state.token} cycleStoreId={i} allData={cycleStore[i]} onClick={() => { this.changeShow(i) }} addFavorite={this.addFavorite} deleteCycle={this.deleteCycle} editCycle={this.editCycle} />)
+                jsx1.push(
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="featured-item">
+                        <div class="thumb">
+                            <div class="thumb-img">
+                                <img src="https://www.herocycles.com/admin/public/uploads/bestseller/60223dea3576c5m0f8TdEWI.png" alt="" />
+                            </div>
+                        </div>
+                        <div class="down-content">
+                        <h4 id="cycleName">User Name :{usedCycles[i].userName}</h4>
+                            <h4 id="cycleName">Cycle Name :{bookedCycles[i].cycleId}</h4>
+                            <h4 id="cycleRate">Cycle Rate : {bookedCycles[i].rate} </h4>
+                            <h4 id="cycleRate">Start Time : {new Date(bookedCycles[i].timeStart).toLocaleString()}  </h4>
+                            
+                            <br />
+                            
+                        </div>
+                    </div>
+                </div>)
+            }
+
+        }
+        console.log(jsx1);
 
         return (
             <div>
@@ -212,18 +357,18 @@ class dealerProfile extends React.Component {
                                     <div class="left-content">
                                         <h2 id="username" >{this.state.name}</h2>
                                         <h3>
-                                           { this.state.contact}
+                                            {this.state.contact}
                                         </h3>
                                         <h3>
-                                           { this.state.email}
+                                            {this.state.email}
                                         </h3>
                                         <h3>
-                                           { this.state.address}
+                                            {this.state.address}
                                         </h3>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
-                                    <img src="https://techcrunch.com/wp-content/uploads/2014/10/facebook-anonymous-blur.jpg?w=730" class="img-fluid" alt="Add an image here"/>
+                                    <img src="https://techcrunch.com/wp-content/uploads/2014/10/facebook-anonymous-blur.jpg?w=730" class="img-fluid" alt="Add an image here" />
                                 </div>
                             </div>
                         </div>
@@ -233,19 +378,44 @@ class dealerProfile extends React.Component {
                     {/* Store section */}
 
                     {/* Store section */}
-                    {jsx}
-                    {/* <Link to={"/addCycleStore"}><button type="button" class="btn btn-outline-primary">Add Cycle Store</button></Link> */}
-                    <section className="featured-places" >
-                        <Link to="/addCycleStore"><div className="container">
-                            <div className="row">
-                                <center>
-                                    <input type="button" defaultValue="Add Cyle Store" style={{ "text-shadow": "2px 2px grey", "height": "105px", "font-size": "25px", "background-image": "url('https://source.unsplash.com/random/720×480/?pink')", "color": "white" }} />
-                                    <br /><br /><hr /><br />
-
-                                </center>
+                    <section class="featured-places">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="section-heading">
+                                        <span><h1>Rented Cycles</h1></span>
+                                        <h2 id="store-name">These are the cycles given on rent by you.</h2>
+                                        <hr />
+                                    </div>
+                                </div>
                             </div>
-                        </div></Link>
+
+                            <div class="row">
+                                {jsx}
+
+                            </div>
+                        </div>
                     </section>
+                    <section class="featured-places">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="section-heading">
+                                        <span><h1>currentBookedCycle Cycles</h1></span>
+                                        <h2 id="store-name">These are the cycles booked by the users.</h2>
+                                        <hr />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                {jsx1}
+
+                            </div>
+                        </div>
+                    </section>
+                    {/* <Link to={"/addCycleStore"}><button type="button" class="btn btn-outline-primary">Add Cycle Store</button></Link> */}
+                    
                 </main>
                 {/* Footer start */}
                 <footer>

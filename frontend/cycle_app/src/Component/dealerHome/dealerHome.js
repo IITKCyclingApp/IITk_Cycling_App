@@ -137,6 +137,8 @@ class dealerHome extends React.Component {
         // this.getData();
         // setInterval(this.getData,2000);
         if (!this.state.loggedIn) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("dealerId");
             return (<Navigate to="/login" replace={true} />)
         }
 
