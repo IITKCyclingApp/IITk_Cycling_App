@@ -21,6 +21,7 @@ Example:
 }
 */
 async function deleteCycleStore(req, res) {
+    console.log("request to delete cycle store");
     const cycle_Store = req.body;
     await dealerModel.updateOne({ dealerId: cycle_Store.dealerId }, { $pull: { cycleStore: { cycleStoreId: cycle_Store.cycleStoreId} } });
     res.status(200).json({'msg':'Cycle Store Deleted'});

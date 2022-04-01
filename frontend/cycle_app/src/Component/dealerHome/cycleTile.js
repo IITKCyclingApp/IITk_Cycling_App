@@ -25,7 +25,7 @@ class CycleTile extends React.Component{
   <div className="featured-item">
     <div className="thumb">
       <div className="thumb-img">
-        <img src="https://source.unsplash.com/random/720×480/?cycle" alt />
+        <img src="https://m.media-amazon.com/images/I/715wCxNPK4L._SX425_.jpg" alt />
       </div>
       {/* Two styles of add to favourites button */}
       {/* <div class="plus-button overlay-content">

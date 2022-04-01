@@ -25,8 +25,8 @@ Example:
 */
 async function addCycleStore(req, res) {
     const cycle_Store = req.body;
-    console.log("post request at add cycle store");
-    console.log(cycle_Store);
+    console.log(" request at add cycle store");
+    
     await dealerModel.updateOne({ dealerId: cycle_Store.dealerId }, { $push: { cycleStore: { contact: cycle_Store.storeContact, address: cycle_Store.storeAddress, cycleStoreId: mongoose.Types.ObjectId(), cycles: [] } } }).catch((err)=>{console.log(err)});
     res.status(200).json({'msg':'Cycle Store Added'});
 }
