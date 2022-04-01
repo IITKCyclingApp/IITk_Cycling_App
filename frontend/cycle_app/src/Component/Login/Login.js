@@ -47,9 +47,9 @@ class Login extends React.Component {
 
       const res = await fetch('http://localhost:5000/loginUser', req);
       const response = await res.json();
-
+      
       if (res.status === 200) {
-
+        
 
         localStorage.setItem("userId", response.userId);
         localStorage.setItem("token", response.token);
@@ -68,7 +68,7 @@ class Login extends React.Component {
 
       console.log(err);
       this.setState({ userLogged: 0 });
-      // alert(err);
+      alert(err);
 
     }
     console.log(this.state.userLogged)

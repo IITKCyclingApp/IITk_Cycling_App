@@ -66,7 +66,7 @@ app.post('/returnCycle', returnCycle);
 app.post('/dealerProfile',dealerProfile);
 app.post('/rentCycles',currentRentCycle);
 app.post('/bookedCycles',currentBookedCycle);
-app.post('/getUserName',getuserName);
+
 // app.use(express)
 
 const port = 5000;
