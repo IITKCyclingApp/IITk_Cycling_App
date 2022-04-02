@@ -19,7 +19,7 @@ class UserProfile extends React.Component {
             email: '',
             address: '',
             contact: '',
-            roll:''
+            roll: ''
         }
         this.getData = this.getData.bind(this);
     }
@@ -58,7 +58,7 @@ class UserProfile extends React.Component {
             const response = await res.json();
             console.log(res)
             if (res.status === 200) {
-                
+
                 this.setState({ name: response.name });
                 this.setState({ email: response.email });
                 this.setState({ roll: response.roll });
@@ -66,21 +66,21 @@ class UserProfile extends React.Component {
                 this.setState({ address: response.address });
             }
             else {
-                
+
                 this.setState({ loggedIn: 0 });
             }
 
         } catch (err) {
 
-            
+
             alert(err);
             this.setState({ loggedIn: 0 });
 
         }
         //used cycles
-        
+
     }
-    
+
 
     render() {
         // this.getData();
@@ -89,9 +89,9 @@ class UserProfile extends React.Component {
             console.log("Hello")
             return (<Navigate to="/login" replace={true} />)
         }
-        
 
-        
+
+
         return (
             <div>
                 <meta charSet="utf-8" />
@@ -113,16 +113,15 @@ class UserProfile extends React.Component {
                             <div className="row">
                                 <div className="col-md-12">
                                     <button id="primary-nav-button" type="button">Menu</button>
-                                    <Link to="/"><div className="logo">
-                                        <img src="logo link" alt="IITK-cycling app" />
-                                    </div></Link>
+
                                     <nav id="primary-nav" className="dropdown cf">
                                         <ul className="dropdown menu">
-                                            <li><Link to="/user/home">Home</Link></li>
+                                            <li><Link to="/user/home">Dashboard</Link></li>
                                             <li><Link to="/user/store">Store</Link></li>
                                             <li><Link to="/user/profile">My Profile</Link></li>
+                                            <li><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></li>
                                         </ul>
-                                    </nav>{/* / #primary-nav */}
+                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -131,20 +130,14 @@ class UserProfile extends React.Component {
                 {/* Navbar end */}
                 {/* Banner start */}
                 <section className="banner" id="top" style={{ "background-image": "url(https://source.unsplash.com/random/1920×700/?cycle)" }}>
-                    {/* <div className="container" > */}
                     <div className="row">
                         <div className="col-md-10 col-md-offset-1">
                             <div className="banner-caption">
                                 <div className="line-dec" />
-                                <h2 style={{ "color": "White", "text-shadow": "2px 2px black" }}>Welcome.</h2>
-                                {/* <div className="blue-button">
-                                    <Link to="/dealer/home" style={{"z-index":100}}>Home</Link>
-                                    <a href="/">sme</a>
-                                </div> */}
+                                <h2 style={{ "color": "White", "text-shadow": "2px 2px black" }}>Profile</h2>
                                 <div className="line-dec" />
                             </div>
                         </div>
-                        {/* </div> */}
                     </div>
                 </section>
                 {/* Banner end */}
@@ -183,20 +176,18 @@ class UserProfile extends React.Component {
                     {/* Store section */}
 
                     {/* Store section */}
-                    
+
                     {/* <Link to={"/addCycleStore"}><button type="button" class="btn btn-outline-primary">Add Cycle Store</button></Link> */}
-                    
+
                 </main>
-                {/* Footer start */}
                 <footer>
                     <div className="container">
                         <div className="row">
                             <div className="col-md-5">
                                 <div className="about-veno">
                                     <div className="logo">
-                                        <img src="img/footer_logo.png" alt="Venue Logo" />
                                     </div>
-                                    <p>Text about us</p>
+                                    <p>IITK Cycling App</p>
                                     <ul className="social-icons">
                                         <li>
                                             <a href="#"><i className="fa fa-facebook" /></a>
@@ -209,14 +200,13 @@ class UserProfile extends React.Component {
                             <div className="col-md-4">
                                 <div className="useful-links">
                                     <div className="footer-heading">
-                                        <h4>what we have to offer for you?</h4>
+                                        <h4>Rent Cycles</h4>
                                     </div>
                                     <div className="row">
                                         <div className="col-md-6">
                                             <ul>
                                                 <li><Link to="/"><i className="fa fa-stop" />Home</Link></li>
-                                                <li><Link to="/store"><i className="fa fa-stop" />Store</Link></li>
-                                                <li><Link to="/profile"><i className="fa fa-stop" />Profile</Link></li>
+                                                <li> <p><a onClick={() => { this.setState({ loggedIn: 0 }) }} style={{ cursor: "pointer" }}>Logout</a></p></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -227,10 +217,10 @@ class UserProfile extends React.Component {
                                     <div className="footer-heading">
                                         <h4>Contact Information</h4>
                                     </div>
-                                    <p><i className="fa fa-map-marker" /> 212 Barrington Court New York, ABC</p>
+                                    <p><i className="fa fa-map-marker" /> Hall 12, IITK</p>
                                     <ul>
-                                        <li><span>Phone:</span><a href="#">+1 333 4040 5566</a></li>
-                                        <li><span>Email:</span><a href="#">contact@company.com</a></li>
+                                        <li><span>Phone:</span><a href="#">9876543210</a></li>
+                                        <li><span>Email:</span><a href="#">arpit@avi.com</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -240,7 +230,7 @@ class UserProfile extends React.Component {
                 {/* Footer end */}
                 {/* Sub footer start */}
                 <div className="sub-footer">
-                    <p>Copyright © 2021 IITK-Cycling App <Link to="/">Our Link</Link></p>
+                    <p>Copyright © 2021 IITK-Cycling App</p>
                 </div>
                 {/* Sub footer end */}
             </div>

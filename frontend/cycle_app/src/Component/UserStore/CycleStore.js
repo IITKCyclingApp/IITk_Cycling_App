@@ -183,7 +183,7 @@ class CycleStore extends React.Component{
                     <div className="container">
                     <div className="row">
                         <center>
-                        <input type="button" defaultValue={allData.cycleStoreAddress} onClick={()=>{this.props.onClick()}} style={{"text-shadow":"2px 2px grey","height":"105px","font-size":"25px","background-image":"url('https://source.unsplash.com/random/720×480/?car')","color":"white"}} />
+                        <input type="button" defaultValue={allData.cycleStoreAddress} onClick={()=>{this.props.onClick()}} style={{"text-shadow":"2px 2px grey","height":"105px","font-size":"25px","background-color": "#685ed9","border-radius":"25px","border":"2px solid black","color":"white"}} />
                         <br /><br /><hr /><br />
                         <div id="cycle1" >
                             {/* Cycle card start */}

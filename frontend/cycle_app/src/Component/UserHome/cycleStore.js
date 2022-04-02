@@ -9,7 +9,7 @@ class CycleStore extends React.Component{
             {this.props.cycles.map((cycle)=>{
             return <cycleTile cycle={cycle}/>
             })
-            }
+            }   
             </div>
         )
 }

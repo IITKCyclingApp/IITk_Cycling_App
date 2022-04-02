@@ -35,6 +35,8 @@ async function returnCycle(req, res) {
     const rate = data1.rate;
     let cost = rate * (data1.timeEnd - data1.timeStart)/(1000*60*60);
     cost =parseInt(cost);
+    await statusModel.updateOne({ cycleId:data.cycleId,userId:data.userId }, { cost:cost});
+
     res.status(200).json({ 'cost': cost });
 }
 export default returnCycle;

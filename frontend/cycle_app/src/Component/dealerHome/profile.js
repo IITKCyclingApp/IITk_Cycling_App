@@ -332,7 +332,7 @@ class dealerProfile extends React.Component {
                         <div className="col-md-10 col-md-offset-1">
                             <div className="banner-caption">
                                 <div className="line-dec" />
-                                <h2 style={{ "color": "White", "text-shadow": "2px 2px black" }}>Welcome.</h2>
+                                <h2 style={{ "color": "White", "text-shadow": "2px 2px black" }}>Profile</h2>
                                 <div className="line-dec" />
                             </div>
                         </div>
