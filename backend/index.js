@@ -40,9 +40,9 @@ app.use(cors());
 // app.set("view engine","ejs");
 //auth
 app.post('/registerUser',registerUser);
-app.post('/registerDealer',registerDealer);
+app.post('/registerDealer',registerDealer); // tested
 app.post('/loginUser',loginUser);
-app.post('/loginDealer',loginDealer);
+app.post('/loginDealer',loginDealer); //tested
 app.use(verify);
 //routes
 app.post('/user/addFavorite', addFavoriteCycle);
@@ -57,15 +57,15 @@ app.post('/user/viewProfile', viewProfileUser);
 app.post('/user/currentStatus', currentStatusUser);
 
 //dealer
-app.post('/addCycleStore', addCycleStore);
-app.post('/deleteCycleStore', deleteCycleStore);
-app.post('/addCycle', addCycle);
-app.post('/deleteCycle', deleteCycle);
-app.post('/editCycle', updateCycle);
+app.post('/addCycleStore', addCycleStore); // tested
+app.post('/deleteCycleStore', deleteCycleStore); // tested
+app.post('/addCycle', addCycle); //tested
+app.post('/deleteCycle', deleteCycle); // tested
+app.post('/editCycle', updateCycle); // check-left
 app.post('/returnCycle', returnCycle);
-app.post('/dealerProfile',dealerProfile);
+app.post('/dealerProfile',dealerProfile); // tested
 app.post('/rentCycles',currentRentCycle);
-app.post('/bookedCycles',currentBookedCycle);
+app.post('/bookedCycles',currentBookedCycle); // tested
 
 // app.use(express)
 
